@@ -1,0 +1,19 @@
+# Archivos locales / temporales
+node_modules/
+_actualizacion_*/
+_epg_work/
+temp/
+*.log
+*.tmp
+*-backup.*
+*-anterior.*
+diagnostico-*.txt
+actualizar-todo-informe.txt
+epg-total-informe.txt
+
+# Resultados generados localmente
+*.xml
+
+# Pero sí versionamos las selecciones y configuraciones XML necesarias
+!*.channels.xml
+!custom/**/*.xml
