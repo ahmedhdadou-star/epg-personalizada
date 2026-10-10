@@ -121,7 +121,12 @@ try {
   }
   # Una cadena temporalmente sin EPG no debe bloquear la actualizacion.
   # EmiratesTV: se intenta recuperar solo datos aun vigentes del XML previo.
-  $optionalIds = @('EmiratesTV.ae')
+  $optionalNames = @{
+    'EmiratesTV.ae' = 'Emirates TV'
+    'ElWatania1.tn' = 'El Watania 1'
+    'ElWatania2.tn' = 'El Watania 2'
+  }
+  $optionalIds = @($optionalNames.Keys)
   $nowUTC = [DateTime]::UtcNow.ToString('yyyyMMddHHmmss')
   if (Test-Path $dest) {
     [xml]$previous = Get-Content $dest -Raw -Encoding UTF8
@@ -134,7 +139,7 @@ try {
           $fallbackChannel = $output.CreateElement('channel')
           $fallbackChannel.SetAttribute('id', $id)
           $display = $output.CreateElement('display-name')
-          $display.InnerText = 'Emirates TV'
+          $display.InnerText = $optionalNames[$id]
           [void]$fallbackChannel.AppendChild($display)
           [void]$tv.AppendChild($fallbackChannel)
         }
@@ -162,7 +167,7 @@ try {
       $fallbackChannel = $output.CreateElement('channel')
       $fallbackChannel.SetAttribute('id', $id)
       $display = $output.CreateElement('display-name')
-      $display.InnerText = 'Emirates TV'
+      $display.InnerText = $optionalNames[$id]
       [void]$fallbackChannel.AppendChild($display)
       [void]$tv.AppendChild($fallbackChannel)
       $channels[$id] = $true
@@ -204,7 +209,7 @@ try {
   if (Test-Path $dest) { Copy-Item $dest $backup -Force }
   Copy-Item $candidate $dest -Force
   $total = @($check.SelectNodes('/tv/programme')).Count
-  $status = "OK $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - 38 canales, $total programas; Emirates TV puede estar vacio y Arryadia anticuada."
+  $status = "OK $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - 38 canales, $total programas; Emirates TV y El Watania 1/2 pueden estar vacios y Arryadia anticuada."
   Add-Content $log $status -Encoding UTF8
   Write-Host "`n$status" -ForegroundColor Green
   Write-Host "Resultado: $dest"
