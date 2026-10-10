@@ -1,11 +1,26 @@
 # EPG personalizada
 
-Repositorio para generar y publicar una EPG XMLTV personalizada para TiviMate.
+Generación automática de una EPG XMLTV personalizada para TiviMate.
 
-La idea es mantener aqui solo:
-- grabbers y scripts personalizados
-- archivos `.channels.xml`
-- configuraciones modificadas necesarias
-- workflow de GitHub Actions
+## Estructura
 
-El XML final `epg-total.xml` se genera automaticamente.
+- `custom/`: solo archivos personalizados, grabbers, selecciones y configuraciones modificadas.
+- `.github/workflows/actualizar-epg.yml`: descarga una copia limpia de `iptv-org/epg`, aplica las personalizaciones, genera la EPG y la publica.
+- `public/`: se crea automáticamente durante el workflow.
+
+## Actualización
+
+La EPG se puede regenerar:
+- manualmente desde **Actions → Actualizar EPG → Run workflow**
+- automáticamente al cambiar archivos dentro de `custom/`
+- automáticamente varias veces al día
+
+## TiviMate
+
+La URL final será:
+
+`https://ahmedhdadou-star.github.io/epg-personalizada/epg-total.xml`
+
+## Importante
+
+No se versiona una copia completa de `iptv-org/epg`. El workflow la descarga de nuevo en cada ejecución y después copia encima las personalizaciones guardadas en `custom/`.
