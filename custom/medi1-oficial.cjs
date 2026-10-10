@@ -17,6 +17,58 @@ const clean = x => String(x || '').replace(/\s+/gu, ' ').trim();
 const esc = x => String(x ?? '').replace(/[<>&"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 const fmt = x => x.utc().format('YYYYMMDDHHmmss +0000');
 const exactTime = /^(?:[01]?\d|2[0-3]):[0-5]\d$/;
+
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+  'Accept-Language': 'ar-MA,ar;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache',
+  'Upgrade-Insecure-Requests': '1',
+  'Sec-Fetch-Dest': 'document',
+  'Sec-Fetch-Mode': 'navigate',
+  'Sec-Fetch-Site': 'same-origin',
+  'Sec-Fetch-User': '?1'
+};
+
+function cookieString(setCookie = []) {
+  return setCookie
+    .map(v => String(v).split(';')[0])
+    .filter(Boolean)
+    .join('; ');
+}
+
+async function crearSesion() {
+  const client = axios.create({
+    timeout: 25000,
+    maxRedirects: 5,
+    validateStatus: s => s >= 200 && s < 400
+  });
+
+  const home = await client.get('https://www.medi1tv.com/ar', {
+    headers: {
+      ...BROWSER_HEADERS,
+      'Referer': 'https://www.google.com/'
+    }
+  });
+
+  const cookies = cookieString(home.headers['set-cookie']);
+
+  return {
+    client,
+    cookies,
+    async get(url) {
+      return client.get(url, {
+        headers: {
+          ...BROWSER_HEADERS,
+          'Referer': 'https://www.medi1tv.com/ar',
+          ...(cookies ? { 'Cookie': cookies } : {})
+        }
+      });
+    }
+  };
+}
+
 const programSelectors = '.program, .programme, .schedule-item, .grille-item, .program-item, .programme-item, .program-block, .programme-block, .grille-program, .program-row, .programme-row, .item-program, .item-programme';
 const titleSelectors = '.program-title, .programme-title, .title, .program-name, .programme-name, h2, h3, h4, h5, strong';
 const descSelectors = '.program-description, .programme-description, .description, .desc, p';
@@ -68,12 +120,13 @@ function extract($) {
   return {data:[...dedup.values()],totalTimes:times.length};
 }
 async function main() {
+  const session = await crearSesion();
   let all=[];
   for (let i=0;i<DAYS+1;i++) { // Día adicional para cierre de la última emisión
     const date=dayjs(START).add(i,'day').format('YYYY-MM-DD');
     const path=date.split('-').reverse().join('-');
     const url=`https://www.medi1tv.com/ar/grille/arabic/${path}`;
-    const {data:html}=await axios.get(url,{headers:{'User-Agent':'Mozilla/5.0'},timeout:25000});
+    const {data:html}=await session.get(url);
     const $=cheerio.load(html);
     const {data,totalTimes}=extract($);
     console.log(`${date}: ${data.length} emisiones reconocidas / ${totalTimes} horarios detectados`);
