@@ -1,0 +1,7 @@
+<channels>
+  <channel site="chaines-tv.orange.fr" site_id="90496" lang="fr" xmltv_id="AlMaghribia.ma">Al Maghribia</channel>
+  <channel site="chaines-tv.orange.fr" site_id="90498" lang="fr" xmltv_id="Arryadia.ma">Arryadia</channel>
+  <channel site="chaines-tv.orange.fr" site_id="90497" lang="fr" xmltv_id="Athaqafia.ma">Athaqafia</channel>
+  <channel site="chaines-tv.orange.fr" site_id="90499" lang="fr" xmltv_id="TamazightTV.ma">Tamazight</channel>
+  <channel site="tv.sfr.fr" site_id="959" lang="fr" xmltv_id="Assadissa.ma">Assadissa</channel>
+</channels>

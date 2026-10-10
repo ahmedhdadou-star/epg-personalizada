@@ -1,0 +1,11 @@
+<channels>
+  <channel site="epgshare01.online" site_id="ES1#LALIGA.TV.BAR.es" lang="es" xmltv_id="epgshare-test-3.es">LALIGA TV BAR</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.Copa.del.Rey.es" lang="es" xmltv_id="epgshare-test-0.es">M+ Copa del Rey</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.Ellas.V.es" lang="es" xmltv_id="epgshare-test-1.es">M+ Ellas V</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.Golf.es" lang="es" xmltv_id="epgshare-test-2.es">M+ Golf</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.LALIGA.TV.2.es" lang="es" xmltv_id="epgshare-test-4.es">M+ LALIGA TV 2</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.LALIGA.TV.3.es" lang="es" xmltv_id="epgshare-test-5.es">M+ LALIGA TV 3</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.LALIGA.TV.4.es" lang="es" xmltv_id="epgshare-test-6.es">M+ LALIGA TV 4</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.Vamos.BAR.es" lang="es" xmltv_id="epgshare-test-7.es">M+ Vamos BAR</channel>
+  <channel site="epgshare01.online" site_id="ES1#M+.Vamos.es" lang="es" xmltv_id="epgshare-test-8.es">M+ Vamos</channel>
+</channels>

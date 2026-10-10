@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<channels>
+  <channel site="epgshare01.online" site_id="PT1#SPORT.TV1.HD.pt" lang="pt" xmltv_id="sporttv1.pt">Sport TV 1</channel>
+  <channel site="epgshare01.online" site_id="PT1#SPORT.TV2.HD.pt" lang="pt" xmltv_id="sporttv2.pt">Sport TV 2</channel>
+  <channel site="epgshare01.online" site_id="PT1#SPORT.TV3.HD.pt" lang="pt" xmltv_id="sporttv3.pt">Sport TV 3</channel>
+  <channel site="epgshare01.online" site_id="PT1#SPORT.TV4.HD.pt" lang="pt" xmltv_id="sporttv4.pt">Sport TV 4</channel>
+  <channel site="epgshare01.online" site_id="PT1#SPORT.TV5.HD.pt" lang="pt" xmltv_id="sporttv5.pt">Sport TV 5</channel>
+  <channel site="epgshare01.online" site_id="PT1#DAZN.1.pt" lang="pt" xmltv_id="dazn1.pt">DAZN 1</channel>
+  <channel site="epgshare01.online" site_id="PT1#DAZN.2.pt" lang="pt" xmltv_id="dazn2.pt">DAZN 2</channel>
+  <channel site="epgshare01.online" site_id="PT1#DAZN.3.pt" lang="pt" xmltv_id="dazn3.pt">DAZN 3</channel>
+  <channel site="epgshare01.online" site_id="PT1#DAZN.4.pt" lang="pt" xmltv_id="dazn4.pt">DAZN 4</channel>
+  <channel site="epgshare01.online" site_id="PT1#DAZN.5.pt" lang="pt" xmltv_id="dazn5.pt">DAZN 5</channel>
+  <channel site="epgshare01.online" site_id="PT1#DAZN.6.pt" lang="pt" xmltv_id="dazn6.pt">DAZN 6</channel>
+</channels>

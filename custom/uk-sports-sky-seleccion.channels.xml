@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<channels>
+  <channel site="sky.com" site_id="GB#1336" lang="en" xmltv_id="tntsportsultimate.uk">TNT Sports Ultimate</channel>
+  <channel site="sky.com" site_id="GB#1701" lang="en" xmltv_id="skysportsmainevent.uk">Sky Sports Main Events</channel>
+  <channel site="sky.com" site_id="GB#1096" lang="en" xmltv_id="skysportspremiereleague.uk">Sky Sports Premier League</channel>
+  <channel site="sky.com" site_id="GB#3843" lang="en" xmltv_id="skysportsfootball.uk">Sky Sports Football</channel>
+  <channel site="sky.com" site_id="GB#1192" lang="en" xmltv_id="premiersports1.uk">Premier Sport 1</channel>
+  <channel site="sky.com" site_id="GB#1193" lang="en" xmltv_id="premiersports2.uk">Premier Sport 2</channel>
+  <channel site="sky.com" site_id="GB#1120" lang="en" xmltv_id="tntsports1.uk">TNT Sports 1</channel>
+  <channel site="sky.com" site_id="GB#3627" lang="en" xmltv_id="tntsports2.uk">TNT Sports 2</channel>
+  <channel site="sky.com" site_id="GB#3629" lang="en" xmltv_id="tntsports3.uk">TNT Sports 3</channel>
+  <channel site="sky.com" site_id="GB#3858" lang="en" xmltv_id="skysportsplus.uk">Sky Sports +</channel>
+  <channel site="sky.com" site_id="GB#1340" lang="en" xmltv_id="skysportsnews.uk">Sky Sports News</channel>
+  <channel site="sky.com" site_id="GB#3835" lang="en" xmltv_id="skysportsf1.uk">Sky Sports F1</channel>
+  <channel site="sky.com" site_id="GB#1284" lang="en" xmltv_id="skysportstennis.uk">Sky Sports Tennis</channel>
+  <channel site="sky.com" site_id="GB#4032" lang="en" xmltv_id="skysportsracing.uk">Sky Sports Racing</channel>
+  <channel site="sky.com" site_id="GB#4090" lang="en" xmltv_id="skysportsmix.uk">Sky Sports Mix</channel>
+  <channel site="sky.com" site_id="GB#4040" lang="en" xmltv_id="tntsports4.uk">TNT Sports 4</channel>
+  <channel site="sky.com" site_id="GB#1343" lang="en" xmltv_id="skysportsaction.uk">Sky Sports Action</channel>
+</channels>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<channels>
+  <channel site="mytelly.co.uk" site_id="1954/tnt-sports-ultimate" lang="en" xmltv_id="tntsportsultimate.uk">TNT Sports Ultimate</channel>
+  <channel site="mytelly.co.uk" site_id="431/sky-sports-main-event" lang="en" xmltv_id="skysportsmainevent.uk">Sky Sports Main Events</channel>
+  <channel site="mytelly.co.uk" site_id="1889/sky-sports-premier-league" lang="en" xmltv_id="skysportspremiereleague.uk">Sky Sports Premier League</channel>
+  <channel site="mytelly.co.uk" site_id="2086/sky-sports-football" lang="en" xmltv_id="skysportsfootball.uk">Sky Sports Football</channel>
+  <channel site="mytelly.co.uk" site_id="1638/premier-sports-1-hd" lang="en" xmltv_id="premiersports1.uk">Premier Sport 1</channel>
+  <channel site="mytelly.co.uk" site_id="2270/premier-sports-2-hd" lang="en" xmltv_id="premiersports2.uk">Premier Sport 2</channel>
+  <channel site="mytelly.co.uk" site_id="1804/tnt-sports-1" lang="en" xmltv_id="tntsports1.uk">TNT Sports 1</channel>
+  <channel site="mytelly.co.uk" site_id="1806/tnt-sports-2" lang="en" xmltv_id="tntsports2.uk">TNT Sports 2</channel>
+  <channel site="mytelly.co.uk" site_id="1952/tnt-sports-3" lang="en" xmltv_id="tntsports3.uk">TNT Sports 3</channel>
+  <channel site="mytelly.co.uk" site_id="2088/sky-sports" lang="en" xmltv_id="skysportsplus.uk">Sky Sports +</channel>
+  <channel site="mytelly.co.uk" site_id="231/sky-sports-news" lang="en" xmltv_id="skysportsnews.uk">Sky Sports News</channel>
+  <channel site="mytelly.co.uk" site_id="1670/sky-sports-f1" lang="en" xmltv_id="skysportsf1.uk">Sky Sports F1</channel>
+  <channel site="mytelly.co.uk" site_id="2450/sky-sports-tennis" lang="en" xmltv_id="skysportstennis.uk">Sky Sports Tennis</channel>
+  <channel site="mytelly.co.uk" site_id="747/sky-sports-racing" lang="en" xmltv_id="skysportsracing.uk">Sky Sports Racing</channel>
+  <channel site="mytelly.co.uk" site_id="2033/sky-sports-mix" lang="en" xmltv_id="skysportsmix.uk">Sky Sports Mix</channel>
+</channels>

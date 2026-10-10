@@ -1,0 +1,12 @@
+<channels>
+  <channel site="elcinema.com" site_id="1129" lang="ar" xmltv_id="MBC4.ae">إم بي سي 4</channel>
+  <channel site="elcinema.com" site_id="1130" lang="ar" xmltv_id="MBCAction.ae">إم بي سي أكشن</channel>
+  <channel site="elcinema.com" site_id="1132" lang="ar" xmltv_id="MBCMax.ae">إم بي سي ماكس</channel>
+  <channel site="elcinema.com" site_id="1148" lang="ar" xmltv_id="RotanaCinemaEgypt.eg">روتانا سينما مصر</channel>
+  <channel site="elcinema.com" site_id="1217" lang="ar" xmltv_id="RotanaClassic.sa">روتانا كلاسيك</channel>
+  <channel site="elcinema.com" site_id="1241" lang="ar" xmltv_id="MBC3.ae">إم بي سي 3</channel>
+  <channel site="elcinema.com" site_id="1312" lang="ar" xmltv_id="AlAoula.ma">الأولى المغربية</channel>
+  <channel site="elcinema.com" site_id="1322" lang="ar" xmltv_id="beINMovies1Premiere.qa">بي إن موفيز بريمير</channel>
+  <channel site="elcinema.com" site_id="1328" lang="ar" xmltv_id="beINSeries2.qa">بي إن سيريس إتش...</channel>
+  <channel site="elcinema.com" site_id="1353" lang="ar" xmltv_id="2MMonde.ma">المغربية الثانية</channel>
+</channels>

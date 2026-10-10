@@ -1,0 +1,8 @@
+<channels>
+  <channel site="sat.tv" site_id="1#38#2M وطني" lang="ar" xmltv_id="2M.ma">2M</channel>
+  <channel site="sat.tv" site_id="1#38#الاولى" lang="ar" xmltv_id="AlAoula.ma">Al Aoula</channel>
+  <channel site="sat.tv" site_id="1#49#المغربية" lang="ar" xmltv_id="AlMaghribia.ma">Al Maghribia</channel>
+  <channel site="sat.tv" site_id="1#49#الرياضية" lang="ar" xmltv_id="Arryadia.ma">Arryadia</channel>
+  <channel site="sat.tv" site_id="1#49#الثقافية" lang="ar" xmltv_id="Athaqafia.ma">Athaqafia</channel>
+  <channel site="sat.tv" site_id="1#49#الأمازيغية" lang="ar" xmltv_id="TamazightTV.ma">Tamazight</channel>
+</channels>

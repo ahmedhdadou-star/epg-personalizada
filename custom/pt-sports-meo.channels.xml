@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<channels>
+  <channel site="meo.pt" site_id="SPT1HD" lang="pt" xmltv_id="sporttv1.pt">Sport TV 1</channel>
+  <channel site="meo.pt" site_id="SPT2HD" lang="pt" xmltv_id="sporttv2.pt">Sport TV 2</channel>
+  <channel site="meo.pt" site_id="SPT3HD" lang="pt" xmltv_id="sporttv3.pt">Sport TV 3</channel>
+  <channel site="meo.pt" site_id="SPT4HD" lang="pt" xmltv_id="sporttv4.pt">Sport TV 4</channel>
+  <channel site="meo.pt" site_id="SPT5HD" lang="pt" xmltv_id="sporttv5.pt">Sport TV 5</channel>
+  <channel site="meo.pt" site_id="DAZN1" lang="pt" xmltv_id="dazn1.pt">DAZN 1</channel>
+  <channel site="meo.pt" site_id="DAZN2" lang="pt" xmltv_id="dazn2.pt">DAZN 2</channel>
+  <channel site="meo.pt" site_id="DAZN3" lang="pt" xmltv_id="dazn3.pt">DAZN 3</channel>
+  <channel site="meo.pt" site_id="DAZN4" lang="pt" xmltv_id="dazn4.pt">DAZN 4</channel>
+  <channel site="meo.pt" site_id="DAZN5" lang="pt" xmltv_id="dazn5.pt">DAZN 5</channel>
+</channels>

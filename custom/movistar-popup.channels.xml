@@ -1,0 +1,4 @@
+<channels>
+  <channel site="movistarplus.es" site_id="TERROR" lang="es" xmltv_id="MovistarTerror.es">M+ Terror</channel>
+  <channel site="movistarplus.es" site_id="MROMA" lang="es" xmltv_id="MovistarRomance.es">M+ Romance</channel>
+</channels>

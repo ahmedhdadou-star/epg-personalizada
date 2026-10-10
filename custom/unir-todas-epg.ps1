@@ -1,0 +1,136 @@
+# Fusion de guias XMLTV probadas. Ejecutar desde la carpeta epg.
+$ErrorActionPreference = 'Stop'
+$base = Split-Path -Parent $MyInvocation.MyCommand.Path
+if (-not $base) { $base = (Get-Location).Path }
+$salida = Join-Path $base 'epg-total.xml'
+$temporal = Join-Path $base 'epg-total.tmp.xml'
+$reporte = Join-Path $base 'epg-total-informe.txt'
+
+# Orden de prioridad: si una fuente contiene el mismo canal y hora de inicio,
+# se conserva la primera y se registra el conflicto.
+# Un solo archivo por cada conjunto de alternativas (no mezclar versiones).
+$grupos = @(
+    @('epg-arabe.xml','epg-arabe-v3.xml','epg-arabe-v2.xml'),
+    @('arabic-sports-alkass.xml'),
+    @('arabic-sports-sin-duplicados.xml'),
+    @('movistar.xml'),
+    @('movistar-nuevos.xml'),
+    @('movistar-popup.xml'),
+    @('orange-cine.xml'),
+    @('epgshare-deportes.xml'),
+    @('pt-meo.xml'),
+    @('uk-sports.xml'),
+    @('hub-epgshare.xml'),
+    @('sky-bundesliga.xml'),
+    @('now-4k.xml'),
+    @('bein.xml'),
+    @('medi1.xml','medi1tv.xml','medi1-arabic.xml'),
+    @('aljazeera-arabic.xml','aljazeera.xml')
+)
+
+$elegidos = [System.Collections.Generic.List[string]]::new()
+$faltantes = [System.Collections.Generic.List[string]]::new()
+foreach ($grupo in $grupos) {
+    $archivo = $null
+    foreach ($alternativa in $grupo) {
+        $ruta = Join-Path $base $alternativa
+        if (Test-Path -LiteralPath $ruta -PathType Leaf) {
+            $archivo = $ruta
+            break
+        }
+    }
+    if ($archivo) { $elegidos.Add($archivo) }
+    else { $faltantes.Add(($grupo -join ' / ')) }
+}
+if ($elegidos.Count -eq 0) { throw 'No se han encontrado XMLTV seleccionados. Guarda el script en tu carpeta epg.' }
+
+[xml]$destino = '<?xml version="1.0" encoding="utf-8"?><tv generator-info-name="EPG personalizada" />'
+$idsCanales = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+$inicios = @{} # canal|start -> clave de evento, para prevenir colisiones
+$duplicados = 0
+$conflictos = [System.Collections.Generic.List[string]]::new()
+$anomalos = [System.Collections.Generic.List[string]]::new()
+$estadisticas = [System.Collections.Generic.List[object]]::new()
+
+foreach ($ruta in $elegidos) {
+    $nombre = Split-Path -Leaf $ruta
+    try { [xml]$origen = Get-Content -LiteralPath $ruta -Raw -Encoding UTF8 }
+    catch { throw "Error leyendo ${nombre}: $($_.Exception.Message)" }
+    if (-not $origen.DocumentElement -or $origen.DocumentElement.LocalName -ne 'tv') {
+        throw "No es XMLTV valido: $nombre"
+    }
+    $alta = 0
+    foreach ($c in @($origen.SelectNodes('/tv/channel'))) {
+        $id = $c.GetAttribute('id')
+        if ([string]::IsNullOrWhiteSpace($id)) { continue }
+        if ($idsCanales.Add($id)) {
+            [void]$destino.DocumentElement.AppendChild($destino.ImportNode($c, $true))
+            $alta++
+        }
+    }
+    $aplicados = 0
+    foreach ($p in @($origen.SelectNodes('/tv/programme'))) {
+        $id = $p.GetAttribute('channel')
+        $start = $p.GetAttribute('start')
+        if (-not $idsCanales.Contains($id) -or -not $start) {
+            $anomalos.Add("Sin canal o inicio: $nombre / $id / $start")
+            continue
+        }
+        $stop = $p.GetAttribute('stop')
+        $titleNode = $p.SelectSingleNode('title')
+        $title = if ($titleNode) { $titleNode.InnerText } else { '' }
+        $clave = "$id`n$start"
+        $datos = "$stop`n$title"
+        if ($inicios.ContainsKey($clave)) {
+            if ($inicios[$clave] -eq $datos) { $duplicados++ }
+            else { $conflictos.Add("$id | $start | $nombre | titulo: $title | prioridad anterior mantenida") }
+            continue
+        }
+        # No inventamos finales y avisamos de intervalos excepcionalmente largos.
+        if ($stop -and $start.Length -ge 12 -and $stop.Length -ge 12) {
+            try {
+                $a = [datetime]::ParseExact($start.Substring(0,12),'yyyyMMddHHmm',[cultureinfo]::InvariantCulture)
+                $b = [datetime]::ParseExact($stop.Substring(0,12),'yyyyMMddHHmm',[cultureinfo]::InvariantCulture)
+                $duracion = ($b - $a).TotalMinutes
+                if ($duracion -le 0 -or $duracion -gt 720) {
+                    $anomalos.Add("Duracion atipica ($duracion min): $nombre / $id / $start")
+                }
+            } catch { $anomalos.Add("Formato horario irregular: $nombre / $id / $start") }
+        }
+        $inicios[$clave] = $datos
+        [void]$destino.DocumentElement.AppendChild($destino.ImportNode($p, $true))
+        $aplicados++
+    }
+    $estadisticas.Add([pscustomobject]@{ Archivo = $nombre; CanalesNuevos = $alta; ProgramasNuevos = $aplicados })
+}
+
+if ($idsCanales.Count -eq 0 -or $inicios.Count -eq 0) { throw 'No se encontro programacion valida. No se modifica la salida.' }
+# Guardar temporal y verificar de nuevo que es XML bien formado.
+$settings = [System.Xml.XmlWriterSettings]::new()
+$settings.Encoding = [System.Text.UTF8Encoding]::new($false)
+$settings.Indent = $true
+$writer = [System.Xml.XmlWriter]::Create($temporal, $settings)
+try { $destino.Save($writer) } finally { $writer.Dispose() }
+[xml]$verificado = Get-Content -LiteralPath $temporal -Raw -Encoding UTF8
+if ($verificado.SelectNodes('/tv/programme').Count -ne $inicios.Count) {
+    Remove-Item $temporal -ErrorAction SilentlyContinue
+    throw 'Error de verificacion: recuento diferente. Se conserva el XML anterior.'
+}
+if (Test-Path $salida) { Copy-Item $salida (Join-Path $base 'epg-total-anterior.xml') -Force }
+Move-Item $temporal $salida -Force
+
+$lineas = @('EPG TOTAL - Informe', "Canales: $($idsCanales.Count)", "Programas: $($inicios.Count)", "Duplicados exactos aproximados: $duplicados", "Conflictos de inicio: $($conflictos.Count)", "Advertencias de datos: $($anomalos.Count)", '', 'ARCHIVOS INCLUIDOS')
+$lineas += $estadisticas | ForEach-Object { "$($_.Archivo): $($_.ProgramasNuevos) programas; $($_.CanalesNuevos) canales nuevos" }
+$lineas += @('', 'FUENTES NO ENCONTRADAS')
+$lineas += $faltantes
+$lineas += @('', 'CONFLICTOS (mismo canal e inicio, prevalece el primer archivo)')
+$lineas += $conflictos
+$lineas += @('', 'ADVERTENCIAS (revisar antes del uso permanente)')
+$lineas += $anomalos
+[System.IO.File]::WriteAllLines($reporte, [string[]]$lineas, [System.Text.UTF8Encoding]::new($true))
+
+$estadisticas | Format-Table -AutoSize
+Write-Host "`nXML: $salida"
+Write-Host "Canales: $($idsCanales.Count) | Programas: $($inicios.Count) | Conflictos: $($conflictos.Count) | Advertencias: $($anomalos.Count)"
+Write-Host "Informe: $reporte"
+Write-Host 'NOTA: algunos datos antiguos, incompletos o con solapes pueden seguir presentes. Revisa el informe.'

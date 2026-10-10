@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<channels>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Premier.1.sg" lang="en" xmltv_id="HubPremier1.sg@SD">HUB Premier 1</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Premier.2.sg" lang="en" xmltv_id="HubPremier2.sg@SD">HUB Premier 2</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Premier.3.sg" lang="en" xmltv_id="HubPremier3.sg@SD">HUB Premier 3</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Premier.4.sg" lang="en" xmltv_id="HubPremier4.sg@SD">HUB Premier 4</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Premier.5.sg" lang="en" xmltv_id="HubPremier5.sg@SD">HUB Premier 5</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Premier.6.sg" lang="en" xmltv_id="HubPremier6.sg@SD">HUB Premier 6</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Sports.1.HD.sg" lang="en" xmltv_id="HubSports1.sg@SD">HUB Sports 1</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Sports.2.HD.sg" lang="en" xmltv_id="HubSports2.sg@SD">HUB Sports 2</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Sports.3.HD.sg" lang="en" xmltv_id="HubSports3.sg@SD">HUB Sports 3</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Sports.4.HD.sg" lang="en" xmltv_id="HubSports4.sg@SD">HUB Sports 4</channel>
+  <channel site="epgshare01.online" site_id="SG1#Hub.Sports.5.HD.sg" lang="en" xmltv_id="HubSports5.sg@SD">HUB Sports 5</channel>
+  <channel site="epgshare01.online" site_id="SG1#beIN.SPORTS.(HD).sg" lang="en" xmltv_id="HubbeINSports1.sg">HUB beIN Sports 1</channel>
+  <channel site="epgshare01.online" site_id="SG1#beIN.SPORTS.2.(HD).sg" lang="en" xmltv_id="HubbeINSports2.sg">HUB beIN Sports 2</channel>
+  <channel site="epgshare01.online" site_id="SG1#beIN.SPORTS.3.(HD).sg" lang="en" xmltv_id="HubbeINSports3.sg">HUB beIN Sports 3</channel>
+</channels>

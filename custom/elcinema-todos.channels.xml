@@ -1,0 +1,105 @@
+<channels>
+  <channel site="elcinema.com" site_id="1101" lang="ar" xmltv_id="ERTU1.eg">قناة مصر الأولى</channel>
+  <channel site="elcinema.com" site_id="1119" lang="ar" xmltv_id="AlMasriyah.eg">المصرية</channel>
+  <channel site="elcinema.com" site_id="1127" lang="ar" xmltv_id="MBC1.ae">إم بي سي</channel>
+  <channel site="elcinema.com" site_id="1128" lang="ar" xmltv_id="MBC2.ae">إم بي سي 2</channel>
+  <channel site="elcinema.com" site_id="1129" lang="ar" xmltv_id="MBC4.ae">إم بي سي 4</channel>
+  <channel site="elcinema.com" site_id="1130" lang="ar" xmltv_id="MBCAction.ae">إم بي سي أكشن</channel>
+  <channel site="elcinema.com" site_id="1131" lang="ar" xmltv_id="MBCPlusDrama.sa">إم بي سي دراما +</channel>
+  <channel site="elcinema.com" site_id="1132" lang="ar" xmltv_id="MBCMax.ae">إم بي سي ماكس</channel>
+  <channel site="elcinema.com" site_id="1134" lang="ar" xmltv_id="OnDrama.eg">أون دراما</channel>
+  <channel site="elcinema.com" site_id="1135" lang="ar" xmltv_id="elcinema-1135">اﻹمارات</channel>
+  <channel site="elcinema.com" site_id="1136" lang="ar" xmltv_id="AbuDhabiTV.ae">أبو ظبي</channel>
+  <channel site="elcinema.com" site_id="1137" lang="ar" xmltv_id="AlhayatTV.eg">الحياة</channel>
+  <channel site="elcinema.com" site_id="1145" lang="ar" xmltv_id="ElMehwarChannel.eg">المحور</channel>
+  <channel site="elcinema.com" site_id="1147" lang="ar" xmltv_id="RotanaDrama.sa">روتانا دراما</channel>
+  <channel site="elcinema.com" site_id="1148" lang="ar" xmltv_id="RotanaCinemaEgypt.eg">روتانا سينما مصر</channel>
+  <channel site="elcinema.com" site_id="1149" lang="ar" xmltv_id="RotanaKhalijia.sa">روتانا خليجية</channel>
+  <channel site="elcinema.com" site_id="1156" lang="ar" xmltv_id="NileDrama.eg">نايل دراما</channel>
+  <channel site="elcinema.com" site_id="1159" lang="ar" xmltv_id="NileLife.eg">نايل لايف</channel>
+  <channel site="elcinema.com" site_id="1168" lang="ar" xmltv_id="LBCInternational.lb">إل بي سي آي</channel>
+  <channel site="elcinema.com" site_id="1169" lang="ar" xmltv_id="DubaiTV.ae">دبي</channel>
+  <channel site="elcinema.com" site_id="1173" lang="ar" xmltv_id="DubaiOne.ae">دبي وان</channel>
+  <channel site="elcinema.com" site_id="1174" lang="ar" xmltv_id="AlKaheraWalNas.eg">القاهرة والناس</channel>
+  <channel site="elcinema.com" site_id="1176" lang="ar" xmltv_id="Cima.eg">سيما</channel>
+  <channel site="elcinema.com" site_id="1177" lang="ar" xmltv_id="SamaDubai.ae">سما دبي</channel>
+  <channel site="elcinema.com" site_id="1188" lang="ar" xmltv_id="SharjahTV.ae">الشارقة</channel>
+  <channel site="elcinema.com" site_id="1193" lang="ar" xmltv_id="AlNahar.eg">النهار</channel>
+  <channel site="elcinema.com" site_id="1194" lang="ar" xmltv_id="MBCDrama.ae">إم بي سي دراما</channel>
+  <channel site="elcinema.com" site_id="1198" lang="ar" xmltv_id="CBC.eg">سي بي سي</channel>
+  <channel site="elcinema.com" site_id="1199" lang="ar" xmltv_id="CBCDrama.eg">سي بي سي دراما</channel>
+  <channel site="elcinema.com" site_id="1203" lang="ar" xmltv_id="OnE.eg">أون إي</channel>
+  <channel site="elcinema.com" site_id="1204" lang="ar" xmltv_id="iFilmArabic.ir">آي فيلم</channel>
+  <channel site="elcinema.com" site_id="1212" lang="ar" xmltv_id="StarMoviesMiddleEast.ae">ستار موفيز</channel>
+  <channel site="elcinema.com" site_id="1216" lang="ar" xmltv_id="AlJadeed.lb">الجديد</channel>
+  <channel site="elcinema.com" site_id="1217" lang="ar" xmltv_id="RotanaClassic.sa">روتانا كلاسيك</channel>
+  <channel site="elcinema.com" site_id="1223" lang="ar" xmltv_id="AlNaharDrama.eg">النهار دراما</channel>
+  <channel site="elcinema.com" site_id="1226" lang="ar" xmltv_id="SadaElbalad.eg">صدى البلد</channel>
+  <channel site="elcinema.com" site_id="1227" lang="ar" xmltv_id="SadaElbaladDrama.eg">صدى البلد دراما</channel>
+  <channel site="elcinema.com" site_id="1239" lang="ar" xmltv_id="MBCMasr.eg">إم بي سي مصر</channel>
+  <channel site="elcinema.com" site_id="1241" lang="ar" xmltv_id="MBC3.ae">إم بي سي 3</channel>
+  <channel site="elcinema.com" site_id="1242" lang="ar" xmltv_id="CartoonNetworkArabic.ae">نتورك بالعربية</channel>
+  <channel site="elcinema.com" site_id="1252" lang="ar" xmltv_id="AlKaheraWalNas2.eg">القاهرة والناس 2</channel>
+  <channel site="elcinema.com" site_id="1259" lang="ar" xmltv_id="MBCBollywood.ae">إم بي سي بوليوود</channel>
+  <channel site="elcinema.com" site_id="1260" lang="ar" xmltv_id="CBCSofra.eg">سي بي سي سفرة</channel>
+  <channel site="elcinema.com" site_id="1261" lang="ar" xmltv_id="ZeeAlwan.ae">زي ألوان</channel>
+  <channel site="elcinema.com" site_id="1264" lang="ar" xmltv_id="AlDafrahTV.ae">الظفرة</channel>
+  <channel site="elcinema.com" site_id="1266" lang="ar" xmltv_id="NationalGeographicAbuDhabi.ae">ناشونال جيوجراف...</channel>
+  <channel site="elcinema.com" site_id="1269" lang="ar" xmltv_id="AlSharqiyaMinKabla.ae">الشرقية</channel>
+  <channel site="elcinema.com" site_id="1272" lang="ar" xmltv_id="DiscoveryChannelMiddleEastAfrica.us">ديسكفري</channel>
+  <channel site="elcinema.com" site_id="1275" lang="ar" xmltv_id="NationalGeographicMiddleEast.uk">ناشيونال جيوجرافيك</channel>
+  <channel site="elcinema.com" site_id="1278" lang="ar" xmltv_id="MBCMasr2.eg">إم بي سي مصر 2</channel>
+  <channel site="elcinema.com" site_id="1279" lang="ar" xmltv_id="SadaElbalad2.eg">صدى البلد 2</channel>
+  <channel site="elcinema.com" site_id="1280" lang="ar" xmltv_id="TeN.eg">تن</channel>
+  <channel site="elcinema.com" site_id="1283" lang="ar" xmltv_id="DubaiZaman.ae">دبي زمان</channel>
+  <channel site="elcinema.com" site_id="1289" lang="ar" xmltv_id="RotanaCinemaKSA.sa">روتانا سينما</channel>
+  <channel site="elcinema.com" site_id="1290" lang="ar" xmltv_id="DMC.eg">دي إم سي</channel>
+  <channel site="elcinema.com" site_id="1292" lang="ar" xmltv_id="DMCDrama.eg">دي إم سي دراما</channel>
+  <channel site="elcinema.com" site_id="1296" lang="ar" xmltv_id="MTV.lb">إم تي في</channel>
+  <channel site="elcinema.com" site_id="1297" lang="ar" xmltv_id="SBC.sa">إس بي سي</channel>
+  <channel site="elcinema.com" site_id="1298" lang="ar" xmltv_id="AmmanTV.jo">عَمان</channel>
+  <channel site="elcinema.com" site_id="1299" lang="ar" xmltv_id="RoyaTV.jo">رؤيا</channel>
+  <channel site="elcinema.com" site_id="1301" lang="ar" xmltv_id="Alsumaria.iq">السومرية</channel>
+  <channel site="elcinema.com" site_id="1302" lang="ar" xmltv_id="FujairahTV.ae">الفجيرة</channel>
+  <channel site="elcinema.com" site_id="1304" lang="ar" xmltv_id="NessmaElJadida.tn">نسمة</channel>
+  <channel site="elcinema.com" site_id="1306" lang="ar" xmltv_id="AlRasheedTV.iq">الرشيد</channel>
+  <channel site="elcinema.com" site_id="1308" lang="ar" xmltv_id="ElWatania1.tn">الوطنية 1</channel>
+  <channel site="elcinema.com" site_id="1309" lang="ar" xmltv_id="beINDrama1.qa">بي إن دراما</channel>
+  <channel site="elcinema.com" site_id="1310" lang="ar" xmltv_id="KTV1.kw">الكويت</channel>
+  <channel site="elcinema.com" site_id="1312" lang="ar" xmltv_id="AlAoula.ma">الأولى المغربية</channel>
+  <channel site="elcinema.com" site_id="1313" lang="ar" xmltv_id="LanaTV.lb">ال تي في</channel>
+  <channel site="elcinema.com" site_id="1314" lang="ar" xmltv_id="JordanTV.jo">الأردن</channel>
+  <channel site="elcinema.com" site_id="1315" lang="ar" xmltv_id="EchoroukTV.dz">الشروق الجزائرية</channel>
+  <channel site="elcinema.com" site_id="1317" lang="ar" xmltv_id="OmanTV.om">عمان</channel>
+  <channel site="elcinema.com" site_id="1319" lang="ar" xmltv_id="QatarTelevision.qa">قطر</channel>
+  <channel site="elcinema.com" site_id="1321" lang="ar" xmltv_id="AlManar.lb">المنار</channel>
+  <channel site="elcinema.com" site_id="1322" lang="ar" xmltv_id="beINMovies1Premiere.qa">بي إن موفيز بريمير</channel>
+  <channel site="elcinema.com" site_id="1323" lang="ar" xmltv_id="beINMovies2Action.qa">بي إن موفيز أكشن</channel>
+  <channel site="elcinema.com" site_id="1324" lang="ar" xmltv_id="beINMovies3Drama.qa">بي إن موفيز دراما</channel>
+  <channel site="elcinema.com" site_id="1327" lang="ar" xmltv_id="beINSeries1.qa">بي إن سيريس</channel>
+  <channel site="elcinema.com" site_id="1328" lang="ar" xmltv_id="beINSeries2.qa">بي إن سيريس إتش...</channel>
+  <channel site="elcinema.com" site_id="1329" lang="ar" xmltv_id="StarWorldMiddleEast.ae">ستار ورلد</channel>
+  <channel site="elcinema.com" site_id="1330" lang="ar" xmltv_id="FoxActionMoviesMENA.hk">ستار أكشن</channel>
+  <channel site="elcinema.com" site_id="1334" lang="ar" xmltv_id="ElWatania2.tn">الوطنية 2</channel>
+  <channel site="elcinema.com" site_id="1336" lang="ar" xmltv_id="MasperoZaman.eg">ماسبيرو زمان</channel>
+  <channel site="elcinema.com" site_id="1339" lang="ar" xmltv_id="AlSaeedah.eg">السعيدة</channel>
+  <channel site="elcinema.com" site_id="1340" lang="ar" xmltv_id="MBCIraq.iq">إم بي سي العراق</channel>
+  <channel site="elcinema.com" site_id="1341" lang="ar" xmltv_id="LBC.sa">إل بي سي</channel>
+  <channel site="elcinema.com" site_id="1349" lang="ar" xmltv_id="AlIraqia.iq">العراقية</channel>
+  <channel site="elcinema.com" site_id="1352" lang="ar" xmltv_id="AlSaudiya.sa">السعودية</channel>
+  <channel site="elcinema.com" site_id="1353" lang="ar" xmltv_id="2MMonde.ma">المغربية الثانية</channel>
+  <channel site="elcinema.com" site_id="1354" lang="ar" xmltv_id="MBC5.ae">إم بي سي 5</channel>
+  <channel site="elcinema.com" site_id="1358" lang="ar" xmltv_id="RotanaComedy.sa">روتانا كوميدي</channel>
+  <channel site="elcinema.com" site_id="1360" lang="ar" xmltv_id="SalamTV.ly">سلام</channel>
+  <channel site="elcinema.com" site_id="1366" lang="ar" xmltv_id="ThikrayatTV.sa">ذكريات</channel>
+  <channel site="elcinema.com" site_id="1367" lang="ar" xmltv_id="UTV.iq">يو تي في</channel>
+  <channel site="elcinema.com" site_id="1368" lang="ar" xmltv_id="BahrainTV.bh">البحرين</channel>
+  <channel site="elcinema.com" site_id="1371" lang="ar" xmltv_id="MixBelAraby.eg">ميكس بالعربي</channel>
+  <channel site="elcinema.com" site_id="1374" lang="ar" xmltv_id="HadhramautTV.ye">تلفزيون حضرموت</channel>
+  <channel site="elcinema.com" site_id="1380" lang="ar" xmltv_id="ATV.kw">إيه تي في</channel>
+  <channel site="elcinema.com" site_id="1382" lang="ar" xmltv_id="AlArabyTV2.qa">التلفزيون العربي 2</channel>
+  <channel site="elcinema.com" site_id="1385" lang="ar" xmltv_id="DijlahTV.iq">دجلة</channel>
+  <channel site="elcinema.com" site_id="1398" lang="ar" xmltv_id="Althania.sy">الثانية</channel>
+  <channel site="elcinema.com" site_id="1399" lang="ar" xmltv_id="MBCMasrDrama.sa">إم بي سي مصر دراما</channel>
+  <channel site="elcinema.com" site_id="1401" lang="ar" xmltv_id="Masah.sa">ماسة</channel>
+</channels>

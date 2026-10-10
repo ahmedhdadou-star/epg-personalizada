@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<channels>
+  <channel site="starhubtvplus.com" site_id="5cee1079-1bb5-4054-ae02-0322144a248b" lang="en" xmltv_id="HubPremier1.sg@SD">HUB Premier 1</channel>
+  <channel site="starhubtvplus.com" site_id="6f186614-28de-416a-b8a6-02fa5c579aa7" lang="en" xmltv_id="HubPremier2.sg@SD">HUB Premier 2</channel>
+  <channel site="starhubtvplus.com" site_id="12c0203a-d5a2-426b-b6d9-e95a0f56d8e5" lang="en" xmltv_id="HubPremier3.sg@SD">HUB Premier 3</channel>
+  <channel site="starhubtvplus.com" site_id="95d31a9e-b5d3-4ac0-a1fd-7a810f4086e9" lang="en" xmltv_id="HubPremier4.sg@SD">HUB Premier 4</channel>
+  <channel site="starhubtvplus.com" site_id="ab0082d5-eeb5-492a-97b3-247c6b194625" lang="en" xmltv_id="HubPremier5.sg@SD">HUB Premier 5</channel>
+  <channel site="starhubtvplus.com" site_id="3fd390ce-6190-4e1b-a05c-a1e8b3705b20" lang="en" xmltv_id="HubPremier6.sg@SD">HUB Premier 6</channel>
+  <channel site="starhubtvplus.com" site_id="b5c3d45b-e2c9-462b-bcf1-06a149d68f25" lang="en" xmltv_id="HubSports1.sg@SD">HUB Sports 1</channel>
+  <channel site="starhubtvplus.com" site_id="347fa620-e966-423c-8d46-98469f0fc974" lang="en" xmltv_id="HubSports2.sg@SD">HUB Sports 2</channel>
+  <channel site="starhubtvplus.com" site_id="4ff7b357-9338-41a3-b7be-ede530555279" lang="en" xmltv_id="HubSports3.sg@SD">HUB Sports 3</channel>
+  <channel site="starhubtvplus.com" site_id="753b50fe-262e-48da-9b5e-3fd9894ff531" lang="en" xmltv_id="HubSports4.sg@SD">HUB Sports 4</channel>
+  <channel site="starhubtvplus.com" site_id="38df8124-1bcd-49b6-abb3-90cc58aa54f4" lang="en" xmltv_id="HubSports5.sg@SD">HUB Sports 5</channel>
+  <channel site="starhubtvplus.com" site_id="9f3a21bb-b934-4147-bfb9-888057ec0657" lang="en" xmltv_id="HubbeINSports1.sg">HUB beIN Sports 1</channel>
+  <channel site="starhubtvplus.com" site_id="6fb02848-2b74-4803-9661-ab4ff642764b" lang="en" xmltv_id="HubbeINSports2.sg">HUB beIN Sports 2</channel>
+  <channel site="starhubtvplus.com" site_id="249f5236-ca5d-416d-98b2-7e6961f1bccd" lang="en" xmltv_id="HubbeINSports3.sg">HUB beIN Sports 3</channel>
+</channels>

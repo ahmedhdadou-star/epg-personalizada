@@ -1,0 +1,7 @@
+<channels>
+  <channel site="snrt.ma" site_id="1208" lang="ar" xmltv_id="AlAoula.ma@SD">Al Aoula</channel>
+  <channel site="snrt.ma" site_id="4070" lang="ar" xmltv_id="Arryadia.ma@HD">Arryadia</channel>
+  <channel site="snrt.ma" site_id="4071" lang="ar" xmltv_id="Athaqafia.ma@SD">Athaqafia</channel>
+  <channel site="snrt.ma" site_id="4073" lang="ar" xmltv_id="Assadissa.ma@SD">Assadissa</channel>
+  <channel site="snrt.ma" site_id="4075" lang="ar" xmltv_id="TamazightTV.ma@SD">Tamazight</channel>
+</channels>

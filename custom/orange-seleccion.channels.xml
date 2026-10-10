@@ -1,0 +1,13 @@
+<channels>
+  <channel site="orangetv.orange.es" site_id="1059" lang="es" xmltv_id="orange-test-1059.es">M LALIGA 5</channel>
+  <channel site="orangetv.orange.es" site_id="11046" lang="es" xmltv_id="orange-test-11046.es">M LALIGA 6</channel>
+  <channel site="orangetv.orange.es" site_id="11229" lang="es" xmltv_id="orange-test-11229.es">DAZN Moto GP</channel>
+  <channel site="orangetv.orange.es" site_id="11009" lang="es" xmltv_id="AMCBreak.es@SD">AMC BREAK</channel>
+  <channel site="orangetv.orange.es" site_id="11042" lang="es" xmltv_id="AMCCrime.es@SD">AMC CRIME</channel>
+  <channel site="orangetv.orange.es" site_id="11011" lang="es" xmltv_id="AMCEurope.uk@Spain">AMC</channel>
+  <channel site="orangetv.orange.es" site_id="11010" lang="es" xmltv_id="CanalHollywood.es@SD">C Hollywood</channel>
+  <channel site="orangetv.orange.es" site_id="11019" lang="es" xmltv_id="Historia.es@SD">C Historia</channel>
+  <channel site="orangetv.orange.es" site_id="1057" lang="es" xmltv_id="LaLigaTV2porMovistarPlusPlus.es@SD">M LALIGA 3</channel>
+  <channel site="orangetv.orange.es" site_id="1058" lang="es" xmltv_id="LaLigaTV3porMovistarPlusPlus.es@SD">M LALIGA 4</channel>
+  <channel site="orangetv.orange.es" site_id="11052" lang="es" xmltv_id="SundanceTV.es@SD">Sundance TV</channel>
+</channels>

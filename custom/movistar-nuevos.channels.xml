@@ -1,0 +1,12 @@
+<channels>
+  <channel site="movistarplus.es" site_id="MBALCT" lang="es" xmltv_id="movistar-test-MBALCT.es">M+ Baloncesto</channel>
+  <channel site="movistarplus.es" site_id="MBALC2" lang="es" xmltv_id="movistar-test-MBALC2.es">M+ Baloncesto 2</channel>
+  <channel site="movistarplus.es" site_id="MBALC3" lang="es" xmltv_id="movistar-test-MBALC3.es">M+ Baloncesto 3</channel>
+  <channel site="movistarplus.es" site_id="MBALC4" lang="es" xmltv_id="movistar-test-MBALC4.es">M+ Baloncesto 4</channel>
+  <channel site="movistarplus.es" site_id="MBALC5" lang="es" xmltv_id="movistar-test-MBALC5.es">M+ Baloncesto 5</channel>
+  <channel site="movistarplus.es" site_id="MLIG2" lang="es" xmltv_id="movistar-test-MLIG2.es">M+ LaLiga 3</channel>
+  <channel site="movistarplus.es" site_id="MLIG3" lang="es" xmltv_id="movistar-test-MLIG3.es">M+ LaLiga 4</channel>
+  <channel site="movistarplus.es" site_id="GOLF+" lang="es" xmltv_id="movistar-test-GOLF+.es">M+ Golf</channel>
+  <channel site="movistarplus.es" site_id="GOLF2" lang="es" xmltv_id="movistar-test-GOLF2.es">M+ Golf 2</channel>
+  <channel site="movistarplus.es" site_id="DAZMOT" lang="es" xmltv_id="movistar-test-DAZMOT.es">DAZN MotoGP</channel>
+</channels>

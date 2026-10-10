@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="movistarplus.es" site_id="MPLUS" lang="es" xmltv_id="MovistarPlus.es">Movistar Plus+</channel>
+  <channel site="movistarplus.es" site_id="VAMOSD" lang="es" xmltv_id="MovistarVamos.es">M+ Vamos</channel>
+  <channel site="movistarplus.es" site_id="MLIGA" lang="es" xmltv_id="MovistarLaLiga.es">M+ LALIGA</channel>
+  <channel site="movistarplus.es" site_id="MVF1" lang="es" xmltv_id="DAZNF1.es">DAZN F1</channel>
+</channels>

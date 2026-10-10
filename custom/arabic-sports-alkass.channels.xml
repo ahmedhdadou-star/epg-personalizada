@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="bein.com" site_id="sports#33" lang="en" xmltv_id="AlkassOne.qa@SD">Al Kass One</channel>
+  <channel site="bein.com" site_id="sports#34" lang="en" xmltv_id="AlkassTwo.qa@SD">Al Kass Two</channel>
+  <channel site="bein.com" site_id="sports#35" lang="en" xmltv_id="AlkassThree.qa@SD">Al Kass Three</channel>
+  <channel site="bein.com" site_id="sports#36" lang="en" xmltv_id="AlkassFour.qa@SD">Al Kass Four</channel>
+  <channel site="bein.com" site_id="sports#37" lang="en" xmltv_id="AlkassFive.qa@SD">Al Kass Five</channel>
+  <channel site="bein.com" site_id="sports#38" lang="en" xmltv_id="AlkassSix.qa@SD">Al Kass Six</channel>
+  <channel site="bein.com" site_id="sports#39" lang="en" xmltv_id="AlkassSeven.qa@SD">Al Kass Seven</channel>
+  <channel site="bein.com" site_id="sports#40" lang="en" xmltv_id="AlkassEight.qa@SD">Al Kass Eight</channel>
+</channels>
