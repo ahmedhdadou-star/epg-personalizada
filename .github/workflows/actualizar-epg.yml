@@ -1,0 +1,79 @@
+name: Actualizar EPG
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "custom/**"
+      - ".github/workflows/actualizar-epg.yml"
+  schedule:
+    - cron: "17 2,8,14,20 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Descargar este repositorio
+        uses: actions/checkout@v4
+
+      - name: Descargar iptv-org/epg
+        shell: pwsh
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git upstream-epg
+
+      - name: Copiar personalizaciones
+        shell: pwsh
+        run: |
+          Copy-Item -Path .\custom\* -Destination .\upstream-epg -Recurse -Force
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: upstream-epg/package-lock.json
+
+      - name: Instalar dependencias
+        working-directory: upstream-epg
+        run: npm ci
+
+      - name: Actualizar EPG
+        working-directory: upstream-epg
+        shell: powershell
+        run: |
+          .\actualizar-todo.ps1
+
+      - name: Preparar publicación
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path .\public -Force | Out-Null
+          Copy-Item .\upstream-epg\epg-total.xml .\public\epg-total.xml -Force
+          if (Test-Path .\upstream-epg\actualizar-todo-informe.txt) {
+            Copy-Item .\upstream-epg\actualizar-todo-informe.txt .\public\actualizar-todo-informe.txt -Force
+          }
+
+      - name: Subir sitio para GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
