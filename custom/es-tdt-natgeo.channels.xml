@@ -1,0 +1,19 @@
+<channels>
+  <channel site="orangetv.orange.es" site_id="1011" lang="es" xmltv_id="Antena3.es@National">Antena 3 HD</channel>
+  <channel site="orangetv.orange.es" site_id="1042" lang="es" xmltv_id="Atreseries.es@SD">Atreseries</channel>
+  <channel site="orangetv.orange.es" site_id="1043" lang="es" xmltv_id="BeMad.es@SD">Be Mad TV</channel>
+  <channel site="orangetv.orange.es" site_id="1012" lang="es" xmltv_id="Cuatro.es@SD">Cuatro HD</channel>
+  <channel site="orangetv.orange.es" site_id="1034" lang="es" xmltv_id="Divinity.es@SD">Divinity</channel>
+  <channel site="orangetv.orange.es" site_id="1044" lang="es" xmltv_id="DKISS.es@SD">DKISS</channel>
+  <channel site="orangetv.orange.es" site_id="1018" lang="es" xmltv_id="DMAX.es@SD">DMAX</channel>
+  <channel site="orangetv.orange.es" site_id="1030" lang="es" xmltv_id="Energy.es@SD">Energy</channel>
+  <channel site="orangetv.orange.es" site_id="1032" lang="es" xmltv_id="FactoriadeFiccion.es@SD">FDF</channel>
+  <channel site="orangetv.orange.es" site_id="1010" lang="es" xmltv_id="La1.es@SD">La 1 HD</channel>
+  <channel site="orangetv.orange.es" site_id="1062" lang="es" xmltv_id="La2.es@SD">La 2 HD</channel>
+  <channel site="orangetv.orange.es" site_id="1014" lang="es" xmltv_id="LaSexta.es@SD">laSexta HD</channel>
+  <channel site="orangetv.orange.es" site_id="1016" lang="es" xmltv_id="Mega.es@SD">Mega</channel>
+  <channel site="orangetv.orange.es" site_id="11017" lang="es" xmltv_id="NationalGeographic.es@SD">NatGeo</channel>
+  <channel site="orangetv.orange.es" site_id="1027" lang="es" xmltv_id="Neox.es@SD">Neox</channel>
+  <channel site="orangetv.orange.es" site_id="1028" lang="es" xmltv_id="Nova.es@SD">Nova</channel>
+  <channel site="orangetv.orange.es" site_id="1013" lang="es" xmltv_id="Telecinco.es@SD">Telecinco HD</channel>
+</channels>
