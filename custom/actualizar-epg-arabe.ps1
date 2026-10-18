@@ -120,8 +120,9 @@ try {
     }
   }
   # Una cadena temporalmente sin EPG no debe bloquear la actualizacion.
-  # EmiratesTV: se intenta recuperar solo datos aun vigentes del XML previo.
+  # Para canales opcionales, recuperar solamente programas aun vigentes del XML previo.
   $optionalNames = @{
+    'RotanaCinemaEgypt.eg' = 'Rotana Cinema Egypt'
     'EmiratesTV.ae' = 'Emirates TV'
     'ElWatania1.tn' = 'El Watania 1'
     'ElWatania2.tn' = 'El Watania 2'
@@ -209,7 +210,7 @@ try {
   if (Test-Path $dest) { Copy-Item $dest $backup -Force }
   Copy-Item $candidate $dest -Force
   $total = @($check.SelectNodes('/tv/programme')).Count
-  $status = "OK $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - 38 canales, $total programas; Emirates TV y El Watania 1/2 pueden estar vacios y Arryadia anticuada."
+  $status = "OK $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - 38 canales, $total programas; Rotana Cinema Egypt, Emirates TV y El Watania 1/2 pueden estar vacios y Arryadia anticuada."
   Add-Content $log $status -Encoding UTF8
   Write-Host "`n$status" -ForegroundColor Green
   Write-Host "Resultado: $dest"
