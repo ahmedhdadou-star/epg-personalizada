@@ -105,6 +105,47 @@ foreach ($ruta in $elegidos) {
 }
 
 if ($idsCanales.Count -eq 0 -or $inicios.Count -eq 0) { throw 'No se encontro programacion valida. No se modifica la salida.' }
+# Equivalencias verificadas con los tvg-id de Moha.m3u.
+# Se aplican exclusivamente al XMLTV combinado; los IDs de los grabbers no cambian.
+# En caso de colision con un canal ya existente, se conserva el ID original.
+$equivalencias = [ordered]@{
+    'movistarpluses.es' = 'movistarpluspluses.es'
+    'mplusestrenos.es' = 'M+.Estrenos.es'
+    'cosmoes.es' = 'Cosmopolitan.es'
+    'syfyes.es' = 'syfyespaña.es'
+    'tcm.es' = 'tcmespaña.es'
+    'discoverychanneles.es' = 'Discovery.Channel.es'
+    'movistargolfes.es' = 'mplusgolfes.es'
+    'goles.es' = 'golplay.es'
+    'movistar-test-MBALCT.es' = 'mplusbaloncestoes.es'
+    'movistar-test-MBALC2.es' = 'mplusbaloncesto2es.es'
+    'movistar-test-MBALC3.es' = 'mplusbaloncesto3es.es'
+    'movistar-test-DAZMOT.es' = 'daznmotogpes.es'
+    'AlJazeera.qa@Arabic' = 'aljazeera.ae'
+    'AlAoula.ma' = 'alaoula.ae'
+    '2M.ma' = '2mmaroc.es'
+    'MBC1.ae' = 'mbc1.ae'
+    'RotanaCinemaEgypt.eg' = 'rotanacinemaegypt.ae'
+}
+$equivalenciasAplicadas = [System.Collections.Generic.List[string]]::new()
+$equivalenciasOmitidas = [System.Collections.Generic.List[string]]::new()
+foreach ($idOriginal in $equivalencias.Keys) {
+    $idNuevo = $equivalencias[$idOriginal]
+    $canal = $destino.SelectSingleNode("/tv/channel[@id='$idOriginal']")
+    if (-not $canal) { continue }
+    if ($idsCanales.Contains($idNuevo)) {
+        $equivalenciasOmitidas.Add("$idOriginal -> $idNuevo (destino ocupado)")
+        continue
+    }
+    $canal.SetAttribute('id', $idNuevo)
+    foreach ($programa in @($destino.SelectNodes("/tv/programme[@channel='$idOriginal']"))) {
+        $programa.SetAttribute('channel', $idNuevo)
+    }
+    [void]$idsCanales.Remove($idOriginal)
+    [void]$idsCanales.Add($idNuevo)
+    $equivalenciasAplicadas.Add("$idOriginal -> $idNuevo")
+}
+
 # Guardar temporal y verificar de nuevo que es XML bien formado.
 $settings = [System.Xml.XmlWriterSettings]::new()
 $settings.Encoding = [System.Text.UTF8Encoding]::new($false)
@@ -121,6 +162,10 @@ Move-Item $temporal $salida -Force
 
 $lineas = @('EPG TOTAL - Informe', "Canales: $($idsCanales.Count)", "Programas: $($inicios.Count)", "Duplicados exactos aproximados: $duplicados", "Conflictos de inicio: $($conflictos.Count)", "Advertencias de datos: $($anomalos.Count)", '', 'ARCHIVOS INCLUIDOS')
 $lineas += $estadisticas | ForEach-Object { "$($_.Archivo): $($_.ProgramasNuevos) programas; $($_.CanalesNuevos) canales nuevos" }
+$lineas += @('', 'EQUIVALENCIAS TVG-ID APLICADAS')
+$lineas += $equivalenciasAplicadas
+$lineas += @('', 'EQUIVALENCIAS OMITIDAS POR COLISION')
+$lineas += $equivalenciasOmitidas
 $lineas += @('', 'FUENTES NO ENCONTRADAS')
 $lineas += $faltantes
 $lineas += @('', 'CONFLICTOS (mismo canal e inicio, prevalece el primer archivo)')
