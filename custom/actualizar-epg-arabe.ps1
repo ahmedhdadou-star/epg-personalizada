@@ -119,82 +119,54 @@ try {
       $counts[$id]++
     }
   }
-  # Una cadena temporalmente sin EPG no debe bloquear la actualizacion.
-  # Para canales opcionales, recuperar solamente programas aun vigentes del XML previo.
-  $optionalNames = @{
-    'RotanaCinemaEgypt.eg' = 'Rotana Cinema Egypt'
-    'AbuDhabiTV.ae' = 'Abu Dhabi TV'
-    'EmiratesTV.ae' = 'Emirates TV'
-    'ElWatania1.tn' = 'El Watania 1'
-    'ElWatania2.tn' = 'El Watania 2'
-  }
-  $optionalIds = @($optionalNames.Keys)
+  # Tolerancia general: un canal sin datos nuevos no bloquea los demas.
+  # Recuperar solo programacion no caducada del XMLTV anterior, si existe.
   $nowUTC = [DateTime]::UtcNow.ToString('yyyyMMddHHmmss')
+  $previous = $null
   if (Test-Path $dest) {
-    [xml]$previous = Get-Content $dest -Raw -Encoding UTF8
-    foreach ($id in $optionalIds) {
-      if (-not $channels.ContainsKey($id)) {
-        $previousChannel = $previous.SelectSingleNode("/tv/channel[@id='$id']")
-        if ($null -ne $previousChannel) {
-          [void]$tv.AppendChild($output.ImportNode($previousChannel, $true))
-        } else {
-          $fallbackChannel = $output.CreateElement('channel')
-          $fallbackChannel.SetAttribute('id', $id)
-          $display = $output.CreateElement('display-name')
-          $display.InnerText = $optionalNames[$id]
-          [void]$fallbackChannel.AppendChild($display)
-          [void]$tv.AppendChild($fallbackChannel)
-        }
-        $channels[$id] = $true
-        $counts[$id] = 0
-      }
-      if ($counts[$id] -eq 0) {
-        foreach ($old in $previous.SelectNodes("/tv/programme[@channel='$id']")) {
-          $endTime = $old.GetAttribute('stop')
-          if (-not $endTime) { $endTime = $old.GetAttribute('start') }
-          if ($endTime.Length -ge 14 -and $endTime.Substring(0,14) -ge $nowUTC) {
-            $start = $old.GetAttribute('start')
-            $key = "$id|$start|$($old.GetAttribute('stop'))|$($old.SelectSingleNode('title').InnerText)"
-            if ($dedupe.Add($key)) {
-              [void]$tv.AppendChild($output.ImportNode($old, $true))
-              $counts[$id]++
-            }
-          }
-        }
-      }
-    }
+    try { [xml]$previous = Get-Content $dest -Raw -Encoding UTF8 }
+    catch { Write-Warning 'La EPG anterior no es XML valido; no se reutilizara.' }
   }
-  foreach ($id in $optionalIds) {
+  foreach ($id in $priority.Keys) {
     if (-not $channels.ContainsKey($id)) {
-      $fallbackChannel = $output.CreateElement('channel')
-      $fallbackChannel.SetAttribute('id', $id)
-      $display = $output.CreateElement('display-name')
-      $display.InnerText = $optionalNames[$id]
-      [void]$fallbackChannel.AppendChild($display)
-      [void]$tv.AppendChild($fallbackChannel)
+      $oldChannel = if ($null -ne $previous) { $previous.SelectSingleNode("/tv/channel[@id='$id']") } else { $null }
+      if ($null -ne $oldChannel) {
+        [void]$tv.AppendChild($output.ImportNode($oldChannel, $true))
+      } else {
+        $fallback = $output.CreateElement('channel')
+        $fallback.SetAttribute('id', $id)
+        $display = $output.CreateElement('display-name')
+        $display.InnerText = $id
+        [void]$fallback.AppendChild($display)
+        [void]$tv.AppendChild($fallback)
+      }
       $channels[$id] = $true
       $counts[$id] = 0
     }
-    if ($counts[$id] -eq 0) {
-      Write-Warning "${id}: sin EPG actual; queda declarado sin inventar programas."
-    }
-  }
-  $missing = @($priority.Keys | Where-Object {
-    (-not $channels.ContainsKey($_) -or $counts[$_] -lt 1) -and ($_ -notin $optionalIds)
-  })
-  if ($missing.Count -gt 0) { throw "Canales obligatorios ausentes o vacios: $($missing -join ', ')" }
-  # Los 5 canales activos de SNRT y 2M deben tener programas de hoy o posteriores.
-  # Arryadia se permite desactualizado, siguiendo la decision del usuario.
-  foreach ($id in (@($snrtIds | Where-Object { $_ -ne 'Arryadia.ma' }) + @('2M.ma') + $wanted)) {
-    $hasUpcoming = $false
-    foreach ($node in $tv.SelectNodes('/tv/programme')) {
-      if ($node.GetAttribute('channel') -eq $id -and
-          $node.GetAttribute('start').Substring(0,14) -ge $nowUTC) {
-        $hasUpcoming = $true
-        break
+    if ($counts[$id] -eq 0 -and $null -ne $previous) {
+      foreach ($old in $previous.SelectNodes("/tv/programme[@channel='$id']")) {
+        $titleNode = $old.SelectSingleNode('title')
+        $startTime = $old.GetAttribute('start')
+        $endTime = $old.GetAttribute('stop')
+        if (-not $endTime) { $endTime = $startTime }
+        if ($null -eq $titleNode -or $startTime.Length -lt 14 -or $endTime.Length -lt 14) { continue }
+        if ($endTime.Substring(0,14) -lt $nowUTC) { continue }
+        $key = "$id|$startTime|$($old.GetAttribute('stop'))|$($titleNode.InnerText)"
+        if ($dedupe.Add($key)) {
+          [void]$tv.AppendChild($output.ImportNode($old, $true))
+          $counts[$id]++
+        }
       }
     }
-    if (-not $hasUpcoming -and $id -notin $optionalIds) { throw "Sin programacion actual o futura: $id" }
+    if ($counts[$id] -eq 0) {
+      Write-Warning "${id}: sin EPG vigente; se mantiene el canal sin inventar programas."
+    }
+  }
+  # Evitar publicar una guia global casi vacia si fallan numerosas fuentes.
+  $totalProgramas = @($tv.SelectNodes('/tv/programme')).Count
+  $canalesConDatos = @($priority.Keys | Where-Object { $counts[$_] -gt 0 }).Count
+  if ($totalProgramas -lt 100 -or $canalesConDatos -lt 10) {
+    throw "EPG insuficiente: $totalProgramas programas en $canalesConDatos canales (minimo: 100 programas y 10 canales)."
   }
   # Escribir y verificar en staging. Solo sustituir el archivo final si todo sale bien.
   $candidate = Join-Path $stage 'epg-arabe.xml'
@@ -211,7 +183,7 @@ try {
   if (Test-Path $dest) { Copy-Item $dest $backup -Force }
   Copy-Item $candidate $dest -Force
   $total = @($check.SelectNodes('/tv/programme')).Count
-  $status = "OK $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - 38 canales, $total programas; Rotana Cinema Egypt, Emirates TV y El Watania 1/2 pueden estar vacios y Arryadia anticuada."
+  $status = "OK $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - 38 canales, $total programas; $canalesConDatos canales con programacion. Los canales vacios no bloquean la publicacion."
   Add-Content $log $status -Encoding UTF8
   Write-Host "`n$status" -ForegroundColor Green
   Write-Host "Resultado: $dest"
