@@ -114,7 +114,10 @@ async function main() {
   }
 
   if (errores.length) {
-    console.error('Extraccion incompleta:', errores);
+    console.warn('Extraccion parcial; los canales afectados se recuperaran del XMLTV anterior si hay datos vigentes:', errores);
+  }
+  if (!todos.length) {
+    console.error('SNRT sin ningun programa; se evita generar un XML vacio.');
     process.exitCode = 1;
     return;
   }
