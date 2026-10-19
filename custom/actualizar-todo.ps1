@@ -228,8 +228,18 @@ try {
     if ($n -eq 0) { throw 'La fusion ha generado XML vacio, invalido o enteramente caducado.' }
     $t = Cargar-XML $total
     $ids = @($t.SelectNodes('/tv/channel') | ForEach-Object { $_.GetAttribute('id') })
-    foreach ($id in @('MBC1.ae','AlAoula.ma','2M.ma','Arryadia.ma')) {
-        if ($id -notin $ids) { throw "Falta canal esencial en la fusion: $id" }
+    # La fusion adapta algunos IDs a los tvg-id del proveedor IPTV.
+    # Validar los identificadores publicados, admitiendo el original por compatibilidad.
+    $esenciales = @(
+        @('mbc1.ae','MBC1.ae'),
+        @('alaoula.ae','AlAoula.ma'),
+        @('2mmaroc.es','2M.ma'),
+        @('Arryadia.ma')
+    )
+    foreach ($alternativas in $esenciales) {
+        if (@($alternativas | Where-Object { $_ -in $ids }).Count -eq 0) {
+            throw "Falta canal esencial en la fusion: $($alternativas -join ' / ')"
+        }
     }
     # 5. Publicar: backup del total anterior y despues copiar solo las fuentes nuevas.
     $destino = Join-Path $base 'epg-total.xml'
