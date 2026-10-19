@@ -123,6 +123,7 @@ try {
   # Para canales opcionales, recuperar solamente programas aun vigentes del XML previo.
   $optionalNames = @{
     'RotanaCinemaEgypt.eg' = 'Rotana Cinema Egypt'
+    'AbuDhabiTV.ae' = 'Abu Dhabi TV'
     'EmiratesTV.ae' = 'Emirates TV'
     'ElWatania1.tn' = 'El Watania 1'
     'ElWatania2.tn' = 'El Watania 2'
