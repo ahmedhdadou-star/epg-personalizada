@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<channels>
+  <channel site="vodafone.pt" site_id="8829" lang="pt" xmltv_id="dazn1.pt">DAZN 1</channel>
+  <channel site="vodafone.pt" site_id="8830" lang="pt" xmltv_id="dazn2.pt">DAZN 2</channel>
+  <channel site="vodafone.pt" site_id="8831" lang="pt" xmltv_id="dazn3.pt">DAZN 3</channel>
+  <channel site="vodafone.pt" site_id="8832" lang="pt" xmltv_id="dazn4.pt">DAZN 4</channel>
+  <channel site="vodafone.pt" site_id="8833" lang="pt" xmltv_id="dazn5.pt">DAZN 5</channel>
+</channels>
