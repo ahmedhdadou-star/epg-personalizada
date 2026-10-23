@@ -146,6 +146,73 @@ foreach ($idOriginal in $equivalencias.Keys) {
     $equivalenciasAplicadas.Add("$idOriginal -> $idNuevo")
 }
 
+# Fallback general para TODAS las fuentes de la EPG:
+# Si un canal carece de programas vigentes, usar los aun vigentes de la
+# ultima guia publicada. La fusion ya aplico las equivalencias M3U.
+$respaldo = Join-Path $base 'epg-respaldo.xml'
+$recuperados = [System.Collections.Generic.List[string]]::new()
+$sinCobertura = [System.Collections.Generic.List[string]]::new()
+$umbral = [DateTime]::UtcNow.ToString('yyyyMMddHHmmss')
+if (Test-Path $respaldo) {
+    try {
+        [xml]$anterior = Get-Content -LiteralPath $respaldo -Raw -Encoding UTF8
+        if ($anterior.DocumentElement.LocalName -ne 'tv') { throw 'No es XMLTV' }
+        # HashSet de IDs con programacion aun vigente obtenida de fuentes nuevas.
+        $conVigentes = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+        foreach ($p in @($destino.SelectNodes('/tv/programme'))) {
+            $fin = $p.GetAttribute('stop')
+            if (-not $fin) { $fin = $p.GetAttribute('start') }
+            if ($fin.Length -ge 14 -and $fin.Substring(0,14) -ge $umbral) {
+                [void]$conVigentes.Add($p.GetAttribute('channel'))
+            }
+        }
+        foreach ($oldChannel in @($anterior.SelectNodes('/tv/channel'))) {
+            $id = $oldChannel.GetAttribute('id')
+            if (-not $id -or $conVigentes.Contains($id)) { continue }
+            $anterioresVigentes = @($anterior.SelectNodes('/tv/programme') | Where-Object {
+                if ($_.GetAttribute('channel') -ne $id) { return $false }
+                $fin = $_.GetAttribute('stop')
+                if (-not $fin) { $fin = $_.GetAttribute('start') }
+                return ($fin.Length -ge 14 -and $fin.Substring(0,14) -ge $umbral)
+            })
+            if ($anterioresVigentes.Count -eq 0) { continue }
+            if ($idsCanales.Add($id)) {
+                [void]$destino.DocumentElement.AppendChild($destino.ImportNode($oldChannel, $true))
+            }
+            $nRecuperados = 0
+            foreach ($old in $anterioresVigentes) {
+                $inicio = $old.GetAttribute('start')
+                $clave = "$id`n$inicio"
+                if (-not $inicio -or $inicios.ContainsKey($clave)) { continue }
+                $titleNode = $old.SelectSingleNode('title')
+                if ($null -eq $titleNode) { continue }
+                $inicios[$clave] = "$($old.GetAttribute('stop'))`n$($titleNode.InnerText)"
+                [void]$destino.DocumentElement.AppendChild($destino.ImportNode($old, $true))
+                $nRecuperados++
+            }
+            if ($nRecuperados -gt 0) {
+                $recuperados.Add("$id : $nRecuperados programas vigentes recuperados")
+                [void]$conVigentes.Add($id)
+            }
+        }
+    } catch {
+        $anomalos.Add("Respaldo global no utilizable: $($_.Exception.Message)")
+    }
+}
+$vigentesFinales = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+$programasVigentes = 0
+foreach ($p in @($destino.SelectNodes('/tv/programme'))) {
+    $fin = $p.GetAttribute('stop')
+    if (-not $fin) { $fin = $p.GetAttribute('start') }
+    if ($fin.Length -ge 14 -and $fin.Substring(0,14) -ge $umbral) {
+        $programasVigentes++
+        [void]$vigentesFinales.Add($p.GetAttribute('channel'))
+    }
+}
+if ($programasVigentes -lt 100 -or $vigentesFinales.Count -lt 10) {
+    throw "EPG total insuficiente: $programasVigentes programas vigentes en $($vigentesFinales.Count) canales."
+}
+
 # Guardar temporal y verificar de nuevo que es XML bien formado.
 $settings = [System.Xml.XmlWriterSettings]::new()
 $settings.Encoding = [System.Text.UTF8Encoding]::new($false)
@@ -162,6 +229,8 @@ Move-Item $temporal $salida -Force
 
 $lineas = @('EPG TOTAL - Informe', "Canales: $($idsCanales.Count)", "Programas: $($inicios.Count)", "Duplicados exactos aproximados: $duplicados", "Conflictos de inicio: $($conflictos.Count)", "Advertencias de datos: $($anomalos.Count)", '', 'ARCHIVOS INCLUIDOS')
 $lineas += $estadisticas | ForEach-Object { "$($_.Archivo): $($_.ProgramasNuevos) programas; $($_.CanalesNuevos) canales nuevos" }
+$lineas += @('', 'PROGRAMACION VIGENTE RECUPERADA DEL RESPALDO PUBLICADO')
+$lineas += $recuperados
 $lineas += @('', 'EQUIVALENCIAS TVG-ID APLICADAS')
 $lineas += $equivalenciasAplicadas
 $lineas += @('', 'EQUIVALENCIAS OMITIDAS POR COLISION')
