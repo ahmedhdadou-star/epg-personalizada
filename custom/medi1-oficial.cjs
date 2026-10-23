@@ -45,24 +45,27 @@ async function crearSesion() {
     validateStatus: s => s >= 200 && s < 400
   });
 
-  const home = await client.get('https://www.medi1tv.com/ar', {
-    headers: {
-      ...BROWSER_HEADERS,
-      'Referer': 'https://www.google.com/'
-    }
-  });
-
-  const cookies = cookieString(home.headers['set-cookie']);
+  // La portada puede devolver 403 aunque la guia siga siendo publica.
+  // No convertir una sesion fallida en un bloqueo de todo el grabber.
+  let cookies = '';
+  try {
+    const home = await client.get('https://www.medi1tv.com/ar', {
+      headers: { ...BROWSER_HEADERS, 'Referer': 'https://www.medi1tv.com/' }
+    });
+    cookies = cookieString(home.headers['set-cookie']);
+    console.log('Medi1: sesion inicial obtenida.');
+  } catch (e) {
+    console.warn('Medi1: portada no accesible (' + (e.response?.status || e.message) + '); probando guia directamente.');
+  }
 
   return {
     client,
-    cookies,
     async get(url) {
       return client.get(url, {
         headers: {
           ...BROWSER_HEADERS,
-          'Referer': 'https://www.medi1tv.com/ar',
-          ...(cookies ? { 'Cookie': cookies } : {})
+          'Referer': 'https://www.medi1tv.com/ar/grille/arabic',
+          ...(cookies ? { Cookie: cookies } : {})
         }
       });
     }
