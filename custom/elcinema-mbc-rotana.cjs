@@ -207,8 +207,10 @@ async function main() {
     }
 
     // Diagnostico: sin desplazamiento horario artificial; preservar tiempos interpretados.
-    const inicioXml = p.inicio
-    const finXml = fin
+    // Correccion contrastada con la emision: EPG publicada 6 horas adelantada.
+    // Aplicar -6h una sola vez a inicio y fin, solo en ElCinema.
+    const inicioXml = p.inicio.subtract(6, 'hour')
+    const finXml = fin.subtract(6, 'hour')
     xml += `<programme start="${xmlTime(inicioXml)}"`
     xml += ` stop="${xmlTime(finXml)}"`
     xml += ` channel="${esc(p.id)}">\n`
