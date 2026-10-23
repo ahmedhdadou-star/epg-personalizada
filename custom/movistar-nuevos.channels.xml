@@ -2,8 +2,11 @@
   <channel site="movistarplus.es" site_id="MBALCT" lang="es" xmltv_id="movistar-test-MBALCT.es">M+ Baloncesto</channel>
   <channel site="movistarplus.es" site_id="MBALC2" lang="es" xmltv_id="movistar-test-MBALC2.es">M+ Baloncesto 2</channel>
   <channel site="movistarplus.es" site_id="MBALC3" lang="es" xmltv_id="movistar-test-MBALC3.es">M+ Baloncesto 3</channel>
-  <channel site="movistarplus.es" site_id="MBALC4" lang="es" xmltv_id="movistar-test-MBALC4.es">M+ Baloncesto 4</channel>
-  <channel site="movistarplus.es" site_id="MBALC5" lang="es" xmltv_id="movistar-test-MBALC5.es">M+ Baloncesto 5</channel>
+  <channel site="movistarplus.es" site_id="MBALC4" lang="es" xmltv_id="mplusbaloncesto4es.es">M+ Baloncesto 4</channel>
+  <channel site="movistarplus.es" site_id="MBALC5" lang="es" xmltv_id="mplusbaloncesto5es.es">M+ Baloncesto 5</channel>
+  <channel site="movistarplus.es" site_id="DAZBA" lang="es" xmltv_id="daznbaloncesto1es.es">DAZN Baloncesto</channel>
+  <channel site="movistarplus.es" site_id="DAZB2" lang="es" xmltv_id="daznbaloncesto2es.es">DAZN Baloncesto 2</channel>
+  <channel site="movistarplus.es" site_id="DAZB3" lang="es" xmltv_id="daznbaloncesto3es.es">DAZN Baloncesto 3</channel>
   <channel site="movistarplus.es" site_id="MLIG2" lang="es" xmltv_id="movistar-test-MLIG2.es">M+ LaLiga 3</channel>
   <channel site="movistarplus.es" site_id="MLIG3" lang="es" xmltv_id="movistar-test-MLIG3.es">M+ LaLiga 4</channel>
   <channel site="movistarplus.es" site_id="GOLF+" lang="es" xmltv_id="movistar-test-GOLF+.es">M+ Golf</channel>
