@@ -23,6 +23,7 @@ $fuentes = @(
     @{ Dest='pt-dazn-vodafone.xml'; Selecciones=@('pt-dazn-vodafone.channels.xml') },
     @{ Dest='hub-epgshare.xml';    Selecciones=@('hub-epgshare.channels.xml') },
     @{ Dest='sky-bundesliga.xml'; Selecciones=@('sky-bundesliga.channels.xml') },
+    @{ Dest='sky-nz-premier-league.xml'; Selecciones=@('sky-nz-premier-league.channels.xml') },
     @{ Dest='now-4k.xml';         Selecciones=@('now-4k.channels.xml') },
     @{ Dest='bein.xml';           Selecciones=@('bein-seleccion.channels.xml','beinsports-mena.channels.xml') },
     @{ Dest='arabic-sports-alkass.xml'; Selecciones=@('arabic-sports-alkass.channels.xml') },
