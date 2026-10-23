@@ -97,6 +97,46 @@ function Ajustar-AlJazeeraArabic([string]$ruta) {
     $doc.Save($ruta)
     Write-Host "Al Jazeera Arabic: +3 horas en $n programas nuevos."
 }
+# Fuente directa EPG.pw para Sky Sports Ultra HD 1 y 2.
+# Se usa solo si ambas descargas son XMLTV validos con programacion.
+function Grabar-SkyUltraEpgPw {
+    $canales = @(
+        @{ Source='471315'; Id='SkySportsUltraHD1.uk@UHD'; Name='Sky Sports Ultra HD 1' },
+        @{ Source='471314'; Id='SkySportsUltraHD2.uk@UHD'; Name='Sky Sports Ultra HD 2' }
+    )
+    [xml]$unido = '<tv generator-info-name="EPG.pw Sky Ultra HD" />'
+    foreach ($canal in $canales) {
+        $temp = Join-Path $work ("_epgpw-" + $canal.Source + ".xml")
+        $uri = "https://epg.pw/api/epg.xml?channel_id=$($canal.Source)"
+        Invoke-WebRequest -Uri $uri -OutFile $temp -UseBasicParsing -TimeoutSec 40 -ErrorAction Stop
+        $src = Cargar-XML $temp
+        $nodos = @($src.SelectNodes('/tv/programme'))
+        if ($nodos.Count -eq 0) { throw "EPG.pw $($canal.Name): sin programas" }
+        $idOriginal = $nodos[0].GetAttribute('channel')
+        if (-not $idOriginal) { throw "EPG.pw $($canal.Name): ID no identificado" }
+        $ch = $unido.CreateElement('channel')
+        $ch.SetAttribute('id', $canal.Id)
+        $nombre = $unido.CreateElement('display-name')
+        $nombre.InnerText = $canal.Name
+        [void]$ch.AppendChild($nombre)
+        [void]$unido.DocumentElement.AppendChild($ch)
+        $count = 0
+        foreach ($prog in $nodos) {
+            if ($prog.GetAttribute('channel') -ne $idOriginal) { continue }
+            if (-not $prog.GetAttribute('start') -or -not $prog.GetAttribute('stop')) { continue }
+            $nodo = $unido.ImportNode($prog, $true)
+            $nodo.SetAttribute('channel', $canal.Id)
+            [void]$unido.DocumentElement.AppendChild($nodo)
+            $count++
+        }
+        if ($count -eq 0) { throw "EPG.pw $($canal.Name): fechas invalidas" }
+        Write-Host "EPG.pw $($canal.Name): $count programas"
+    }
+    $destino = Join-Path $work 'uk-sports-ultrahd.xml'
+    $unido.Save($destino)
+    if ((Probar-XML $destino $true) -eq 0) { throw 'EPG.pw: sin programacion vigente' }
+    return $destino
+}
 function Grabar([string]$salida, [string[]]$selecciones) {
     $seleccion = $null
     foreach ($nombre in $selecciones) {
@@ -220,6 +260,15 @@ try {
     }
     # 2. Grabbers iptv-org. Solo seleccionados y no archivos de diagnostico.
     foreach ($f in $fuentes) { [void](Grabar $f.Dest $f.Selecciones) }
+    # Preferir programacion EPG.pw verificada de ambas senales sobre IDs Sky provisionales.
+    try {
+        $skyUltra = Grabar-SkyUltraEpgPw
+        $ok.Add('uk-sports-ultrahd.xml : EPG.pw Sky Ultra HD 1 y 2')
+    } catch {
+        $fallos.Add("EPG.pw Sky Ultra HD: $($_.Exception.Message). Se mantiene el grabber Sky o respaldo.")
+        Write-Warning "EPG.pw Sky Ultra HD no disponible; se conserva la fuente alternativa."
+    }
+
     # Medi1 TV Arabic: fuente oficial. Ejecutar en la carpeta temporal para no
     # modificar la ultima guia correcta hasta que XML y fechas esten validados.
     Write-Host "`n>>> medi1-arabic.xml (Medi1 oficial)" -ForegroundColor Cyan
