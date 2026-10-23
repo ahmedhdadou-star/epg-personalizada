@@ -52,7 +52,7 @@ function Probar-XML([string]$ruta, [bool]$vigente=$true) {
         return $programas.Count
     } catch { return 0 }
 }
-# Corregir el desfase observado exclusivamente en fuentes portuguesas nuevas.
+# Invertir el ajuste observado: fuentes portuguesas nuevas +1 hora.
 function Ajustar-HoraPortugal([string]$ruta) {
     $doc = Cargar-XML $ruta
     $cambiados = 0
@@ -64,7 +64,7 @@ function Ajustar-HoraPortugal([string]$ruta) {
                 throw "Fecha XMLTV inesperada: $valor"
             }
             $fecha = [datetime]::ParseExact($matches[1],'yyyyMMddHHmmss',[cultureinfo]::InvariantCulture)
-            $nueva = $fecha.AddHours(-1).ToString('yyyyMMddHHmmss',[cultureinfo]::InvariantCulture)
+            $nueva = $fecha.AddHours(1).ToString('yyyyMMddHHmmss',[cultureinfo]::InvariantCulture)
             $offset = if ($matches[2]) { ' ' + $matches[2] } else { '' }
             $p.SetAttribute($campo, $nueva + $offset)
         }
@@ -72,9 +72,9 @@ function Ajustar-HoraPortugal([string]$ruta) {
     }
     if ($cambiados -eq 0) { throw 'Sin programas portugueses que ajustar' }
     $doc.Save($ruta)
-    Write-Host "Portugal: -1 hora aplicada a $cambiados programas nuevos en $(Split-Path -Leaf $ruta)"
+    Write-Host "Portugal: +1 hora aplicada a $cambiados programas nuevos en $(Split-Path -Leaf $ruta)"
 }
-# Ajuste observado en TiviMate: Al Jazeera Arabic va tres horas atrasada.
+# Ajuste horario invertido segun comprobacion en TiviMate: Al Jazeera Arabic -3 horas.
 # Desplazar unicamente programas nuevos del canal arabe y nunca los respaldos.
 function Ajustar-AlJazeeraArabic([string]$ruta) {
     $doc = Cargar-XML $ruta
@@ -89,13 +89,13 @@ function Ajustar-AlJazeeraArabic([string]$ruta) {
             }
             $fecha = [datetime]::ParseExact($matches[1], 'yyyyMMddHHmmss', [cultureinfo]::InvariantCulture)
             $offset = if ($matches[2]) { ' ' + $matches[2] } else { '' }
-            $p.SetAttribute($campo, $fecha.AddHours(3).ToString('yyyyMMddHHmmss', [cultureinfo]::InvariantCulture) + $offset)
+            $p.SetAttribute($campo, $fecha.AddHours(-3).ToString('yyyyMMddHHmmss', [cultureinfo]::InvariantCulture) + $offset)
         }
         $n++
     }
     if ($n -eq 0) { throw 'Al Jazeera Arabic sin programas que corregir' }
     $doc.Save($ruta)
-    Write-Host "Al Jazeera Arabic: +3 horas en $n programas nuevos."
+    Write-Host "Al Jazeera Arabic: -3 horas en $n programas nuevos."
 }
 # Fuente directa EPG.pw para Sky Sports Ultra HD 1 y 2.
 # Se usa solo si ambas descargas son XMLTV validos con programacion.
