@@ -198,8 +198,13 @@ async function main() {
       continue
     }
 
-    xml += `<programme start="${xmlTime(p.inicio)}"`
-    xml += ` stop="${xmlTime(fin)}"`
+    // Los MBC aparecen 5 horas adelantados respecto a la emision real.
+    // Ajustar solo MBC; no modificar Rotana ni otras fuentes.
+    const ajusteMbc = p.id.startsWith('MBC') ? 5 : 0
+    const inicioXml = p.inicio.subtract(ajusteMbc, 'hour')
+    const finXml = fin.subtract(ajusteMbc, 'hour')
+    xml += `<programme start="${xmlTime(inicioXml)}"`
+    xml += ` stop="${xmlTime(finXml)}"`
     xml += ` channel="${esc(p.id)}">\n`
     xml += `<title lang="ar">${esc(p.titulo)}</title>\n`
 
