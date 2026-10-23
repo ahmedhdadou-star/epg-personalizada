@@ -83,7 +83,20 @@ function Ajustar-AlJazeeraArabic([string]$ruta) {
         foreach ($campo in @('start','stop')) {
             $valor = $p.GetAttribute($campo)
             if (-not $valor) { continue }
-            if ($valor -notmatch '^(\d{14})(?:\s+([+-]\d{4}))?
+            if ($valor -notmatch '^(\d{14})(?:\s+([+-]\d{4}))?$') {
+                throw "Fecha Al Jazeera inesperada: $valor"
+            }
+            $fecha = [datetime]::ParseExact($matches[1], 'yyyyMMddHHmmss', [cultureinfo]::InvariantCulture)
+            $offset = if ($matches[2]) { ' ' + $matches[2] } else { '' }
+            $p.SetAttribute($campo, $fecha.AddHours(3).ToString('yyyyMMddHHmmss', [cultureinfo]::InvariantCulture) + $offset)
+        }
+        $n++
+    }
+    if ($n -eq 0) { throw 'Al Jazeera Arabic sin programas que corregir' }
+    $doc.Save($ruta)
+    Write-Host "Al Jazeera Arabic: +3 horas en $n programas nuevos."
+}
+function Grabar([string]$salida, [string[]]$selecciones) {
     $seleccion = $null
     foreach ($nombre in $selecciones) {
         if (Test-Path -LiteralPath (Join-Path $base $nombre)) { $seleccion = $nombre; break }
