@@ -127,11 +127,42 @@ try {
     try { [xml]$previous = Get-Content $dest -Raw -Encoding UTF8 }
     catch { Write-Warning 'La EPG anterior no es XML valido; no se reutilizara.' }
   }
+  if ($null -eq $previous) {
+    $publicada = Join-Path $stage 'epg-publicada-anterior.xml'
+    try {
+      Invoke-WebRequest -Uri 'https://ahmedhdadou-star.github.io/epg-personalizada/epg-total.xml' -OutFile $publicada -UseBasicParsing -TimeoutSec 60 -ErrorAction Stop
+      [xml]$copia = Get-Content $publicada -Raw -Encoding UTF8
+      if ($copia.DocumentElement.LocalName -ne 'tv' -or @($copia.SelectNodes('/tv/programme')).Count -lt 100) {
+        throw 'El respaldo publicado no contiene XMLTV valido suficiente.'
+      }
+      $previous = $copia
+      Write-Host 'Respaldo XMLTV publicado recuperado para canales sin programas.' -ForegroundColor Yellow
+    } catch {
+      Write-Warning "No se pudo recuperar el respaldo publicado: $($_.Exception.Message)"
+    }
+  }
+  # El XMLTV publicado adapta ciertos IDs a los identificadores M3U.
+  $idsPublicados = @{
+    'AlAoula.ma' = 'alaoula.ae'
+    '2M.ma' = '2mmaroc.es'
+    'MBC1.ae' = 'mbc1.ae'
+    'RotanaCinemaEgypt.eg' = 'rotanacinemaegypt.ae'
+  }
+  function Id-Anterior([string]$id) {
+    if ($null -ne $previous -and $idsPublicados.ContainsKey($id) -and
+        $null -ne $previous.SelectSingleNode("/tv/channel[@id='$($idsPublicados[$id])']")) {
+      return $idsPublicados[$id]
+    }
+    return $id
+  }
   foreach ($id in $priority.Keys) {
     if (-not $channels.ContainsKey($id)) {
-      $oldChannel = if ($null -ne $previous) { $previous.SelectSingleNode("/tv/channel[@id='$id']") } else { $null }
+      $idRespaldo = Id-Anterior $id
+      $oldChannel = if ($null -ne $previous) { $previous.SelectSingleNode("/tv/channel[@id='$idRespaldo']") } else { $null }
       if ($null -ne $oldChannel) {
-        [void]$tv.AppendChild($output.ImportNode($oldChannel, $true))
+        $importado = $output.ImportNode($oldChannel, $true)
+        $importado.SetAttribute('id', $id)
+        [void]$tv.AppendChild($importado)
       } else {
         $fallback = $output.CreateElement('channel')
         $fallback.SetAttribute('id', $id)
@@ -144,7 +175,8 @@ try {
       $counts[$id] = 0
     }
     if ($counts[$id] -eq 0 -and $null -ne $previous) {
-      foreach ($old in $previous.SelectNodes("/tv/programme[@channel='$id']")) {
+      $idRespaldo = Id-Anterior $id
+      foreach ($old in $previous.SelectNodes("/tv/programme[@channel='$idRespaldo']")) {
         $titleNode = $old.SelectSingleNode('title')
         $startTime = $old.GetAttribute('start')
         $endTime = $old.GetAttribute('stop')
@@ -153,7 +185,9 @@ try {
         if ($endTime.Substring(0,14) -lt $nowUTC) { continue }
         $key = "$id|$startTime|$($old.GetAttribute('stop'))|$($titleNode.InnerText)"
         if ($dedupe.Add($key)) {
-          [void]$tv.AppendChild($output.ImportNode($old, $true))
+          $importado = $output.ImportNode($old, $true)
+          $importado.SetAttribute('channel', $id)
+          [void]$tv.AppendChild($importado)
           $counts[$id]++
         }
       }
