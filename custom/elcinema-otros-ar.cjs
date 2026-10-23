@@ -8,7 +8,8 @@ dayjs.extend(require('dayjs/plugin/timezone'))
 dayjs.extend(require('dayjs/plugin/customParseFormat'))
 
 // Zona provisional configurable hasta cotejar los horarios reales con emisiones.
-const ZONE = process.env.ELCINEMA_TIMEZONE || 'Europe/Madrid'
+// Confirmado con MBC 5 y Rotana Cinema Masr: los horarios web corresponden a Espana.
+const ZONE = 'Europe/Madrid'
 const YEAR = 2026
 
 const ids = new Set([
