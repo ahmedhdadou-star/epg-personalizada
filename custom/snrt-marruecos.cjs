@@ -32,10 +32,21 @@ const xmlTime = d => d.utc().format('YYYYMMDDHHmmss +0000');
 async function extraer([nodo, id, nombre]) {
   const url = `https://www.snrt.ma/ar/node/${nodo}`;
 
-  const {data} = await axios.get(url, {
-    headers: {'User-Agent':'Mozilla/5.0'},
-    timeout: 20000
-  });
+  let data;
+  for (let intento = 1; intento <= 3; intento++) {
+    try {
+      ({data} = await axios.get(url, {
+        headers: {'User-Agent':'Mozilla/5.0'},
+        timeout: 20000
+      }));
+      break;
+    } catch (e) {
+      if (intento === 3 || ![429,500,502,503,504].includes(e.response?.status) && e.code !== 'ECONNABORTED') throw e;
+      const espera = intento * 2000;
+      console.warn(`${nombre}: intento ${intento} fallido; reintento en ${espera} ms`);
+      await new Promise(r => setTimeout(r, espera));
+    }
+  }
 
   const $ = cheerio.load(data);
   const lista = [];
@@ -117,9 +128,7 @@ async function main() {
     console.warn('Extraccion parcial; los canales afectados se recuperaran del XMLTV anterior si hay datos vigentes:', errores);
   }
   if (!todos.length) {
-    console.error('SNRT sin ningun programa; se evita generar un XML vacio.');
-    process.exitCode = 1;
-    return;
+    console.warn('SNRT sin programas nuevos; se generan canales vacios para recuperar datos del respaldo publicado.');
   }
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
