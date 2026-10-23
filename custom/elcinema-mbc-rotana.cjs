@@ -7,7 +7,8 @@ dayjs.extend(require('dayjs/plugin/utc'))
 dayjs.extend(require('dayjs/plugin/timezone'))
 dayjs.extend(require('dayjs/plugin/customParseFormat'))
 
-const ZONE = 'Europe/Madrid'
+// Zona provisional configurable hasta cotejar los horarios reales con emisiones.
+const ZONE = process.env.ELCINEMA_TIMEZONE || 'Europe/Madrid'
 const YEAR = 2026
 
 const canales = [
@@ -152,6 +153,12 @@ async function main() {
 
     // Peticiones secuenciales, con pequeña pausa
     await new Promise(r => setTimeout(r,700))
+  }
+
+  console.log('ELCINEMA_TIMEZONE:', ZONE, '(sin ajustes horarios artificiales)')
+  console.log('Muestras ElCinema: fecha y hora web -> UTC XMLTV')
+  for (const p of todos.slice(0, 12)) {
+    console.log(`${p.nombre} | ${p.fecha} ${p.horario} -> ${xmlTime(p.inicio)}`)
   }
 
   todos.sort((a,b) =>
