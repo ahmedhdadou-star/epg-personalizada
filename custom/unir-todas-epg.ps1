@@ -23,6 +23,7 @@ $grupos = @(
     @('uk-sports.xml'),
     @('hub-epgshare.xml'),
     @('sky-bundesliga.xml'),
+    @('uk-sports-ultrahd.xml'),
     @('sky-nz-premier-league.xml'),
     @('now-4k.xml'),
     @('bein.xml'),
