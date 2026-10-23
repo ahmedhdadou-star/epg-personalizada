@@ -198,10 +198,9 @@ async function main() {
       continue
     }
 
-    // Desfase observado de ElCinema: desplazar cinco horas hacia adelante.
-    // Se aplica una sola vez, al generar XMLTV, tanto a MBC como a Rotana.
-    const inicioXml = p.inicio.add(5, 'hour')
-    const finXml = fin.add(5, 'hour')
+    // Diagnostico: sin desplazamiento horario artificial; preservar tiempos interpretados.
+    const inicioXml = p.inicio
+    const finXml = fin
     xml += `<programme start="${xmlTime(inicioXml)}"`
     xml += ` stop="${xmlTime(finXml)}"`
     xml += ` channel="${esc(p.id)}">\n`
