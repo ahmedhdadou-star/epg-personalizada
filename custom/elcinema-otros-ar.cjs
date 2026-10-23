@@ -205,10 +205,9 @@ async function main() {
       continue
     }
 
-    // Mismo ajuste horario observado en la fuente ElCinema (+5h).
-    // Solo se aplica al XMLTV generado, sin afectar otros grabbers.
-    const inicioXml = p.inicio.add(5, 'hour')
-    const finXml = fin.add(5, 'hour')
+    // Diagnostico: sin desplazamiento horario artificial; preservar tiempos interpretados.
+    const inicioXml = p.inicio
+    const finXml = fin
     xml += `<programme start="${xmlTime(inicioXml)}"`
     xml += ` stop="${xmlTime(finXml)}"`
     xml += ` channel="${esc(p.id)}">\n`
