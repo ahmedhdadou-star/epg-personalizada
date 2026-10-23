@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <!-- Identificadores provisionales Sky UK: verificar que correspondan a Ultra HD 1 y 2. -->
+  <channel site="sky.com" site_id="GB#7221" lang="en" xmltv_id="SkySportsUltraHD1.uk@UHD">Sky Sports Ultra HD 1 (provisional)</channel>
+  <channel site="sky.com" site_id="GB#9002" lang="en" xmltv_id="SkySportsUltraHD2.uk@UHD">Sky Sports Ultra HD 2 (provisional)</channel>
+</channels>
