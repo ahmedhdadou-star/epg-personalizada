@@ -1,3 +1,4 @@
 ﻿<channels>
   <channel site="sky.com" site_id="DE#105" lang="de" xmltv_id="SkySportBundesliga.de@HD">Sky Sport Bundesliga</channel>
+  <channel site="sky.com" site_id="DE#553" lang="de" xmltv_id="SkySport.de@UHD">Sky Sport UHD</channel>
 </channels>
