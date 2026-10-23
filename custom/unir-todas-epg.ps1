@@ -19,6 +19,7 @@ $grupos = @(
     @('orange-cine.xml'),
     @('epgshare-deportes.xml'),
     @('pt-meo.xml'),
+    @('pt-dazn-vodafone.xml'),
     @('uk-sports.xml'),
     @('hub-epgshare.xml'),
     @('sky-bundesliga.xml'),
