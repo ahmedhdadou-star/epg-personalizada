@@ -20,6 +20,7 @@ $fuentes = @(
     @{ Dest='orange-cine.xml';     Selecciones=@('orange-cine.channels.xml') },
     @{ Dest='epgshare-deportes.xml'; Selecciones=@('epgshare-deportes.channels.xml') },
     @{ Dest='pt-meo.xml';          Selecciones=@('pt-sports-meo.channels.xml') },
+    @{ Dest='pt-dazn-vodafone.xml'; Selecciones=@('pt-dazn-vodafone.channels.xml') },
     @{ Dest='hub-epgshare.xml';    Selecciones=@('hub-epgshare.channels.xml') },
     @{ Dest='sky-bundesliga.xml'; Selecciones=@('sky-bundesliga.channels.xml') },
     @{ Dest='now-4k.xml';         Selecciones=@('now-4k.channels.xml') },
