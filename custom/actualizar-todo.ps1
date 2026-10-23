@@ -149,6 +149,21 @@ try {
         $fallos.Add('Arabe: usando copia v3 anterior, comprobar fechas.')
     }
     Copy-Item -LiteralPath $arabe -Destination (Join-Path $work 'epg-arabe.xml')
+    # Respaldo general: se recupera una sola vez la ultima guia publicada.
+    # El fusionador reutilizara exclusivamente programas aun vigentes de canales
+    # cuyo grabber haya fallado o no haya devuelto programacion vigente.
+    $respaldo = Join-Path $work 'epg-respaldo.xml'
+    try {
+        Invoke-WebRequest -Uri 'https://ahmedhdadou-star.github.io/epg-personalizada/epg-total.xml' -OutFile $respaldo -UseBasicParsing -TimeoutSec 60 -ErrorAction Stop
+        $copia = Cargar-XML $respaldo
+        if (@($copia.SelectNodes('/tv/channel')).Count -lt 50 -or @($copia.SelectNodes('/tv/programme')).Count -lt 100) {
+            throw 'Respaldo publicado insuficiente'
+        }
+        $ok.Add('Respaldo: ultima EPG publicada descargada y validada.')
+    } catch {
+        Remove-Item $respaldo -Force -ErrorAction SilentlyContinue
+        $fallos.Add("Respaldo publicado no disponible: $($_.Exception.Message)")
+    }
     # 2. Grabbers iptv-org. Solo seleccionados y no archivos de diagnostico.
     foreach ($f in $fuentes) { [void](Grabar $f.Dest $f.Selecciones) }
     # Medi1 TV Arabic: fuente oficial. Ejecutar en la carpeta temporal para no
