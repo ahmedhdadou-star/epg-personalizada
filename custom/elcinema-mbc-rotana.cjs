@@ -198,11 +198,10 @@ async function main() {
       continue
     }
 
-    // Los MBC aparecen 5 horas adelantados respecto a la emision real.
-    // Ajustar solo MBC; no modificar Rotana ni otras fuentes.
-    const ajusteMbc = p.id.startsWith('MBC') ? 5 : 0
-    const inicioXml = p.inicio.subtract(ajusteMbc, 'hour')
-    const finXml = fin.subtract(ajusteMbc, 'hour')
+    // Desfase observado de ElCinema: desplazar cinco horas hacia atras.
+    // Se aplica una sola vez, al generar XMLTV, tanto a MBC como a Rotana.
+    const inicioXml = p.inicio.subtract(5, 'hour')
+    const finXml = fin.subtract(5, 'hour')
     xml += `<programme start="${xmlTime(inicioXml)}"`
     xml += ` stop="${xmlTime(finXml)}"`
     xml += ` channel="${esc(p.id)}">\n`
