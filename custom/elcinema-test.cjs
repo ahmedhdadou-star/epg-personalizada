@@ -5,7 +5,7 @@ assert.equal(new Set(wanted).size,31,'La selección debe tener 31 canales único
 function xmlUtc(iso) {
  const d=new Date(iso)
  assert.ok(!Number.isNaN(d.getTime()),'Fecha inválida: '+iso)
- const s=d.toISOString().replace(/[-:]/g,'').slice(0,14)
+ const s=d.toISOString().replace(/[-:T]/g,'').slice(0,14)
  return s+' +0000'
 }
 assert.equal(xmlUtc('2026-10-24T03:00:00+02:00'),'20261024010000 +0000')
