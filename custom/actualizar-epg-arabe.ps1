@@ -113,12 +113,21 @@ try {
       $stop = $node.GetAttribute('stop')
       $titleNode = $node.SelectSingleNode('title')
       if ($null -eq $titleNode -or -not $start) { throw "Programa incompleto: $id" }
-      # Ajuste publicado ElCinema: -1 hora, aplicado SOLO a programas nuevos
-      # de los 31 canales ElCinema. SNRT, 2M y respaldos quedan intactos.
+      # Ajuste -1h SOLO a programas nuevos de ElCinema (no SNRT, 2M o respaldo).
       if ($entry.name -eq 'ElCinema') {
         foreach ($attr in @('start','stop')) {
           $rawTime = $node.GetAttribute($attr)
-          if ($rawTime -notmatch '^(\\d{14})(\\s+[+-]\\d{4})?
+          if ($rawTime -notmatch '^(\d{14})(\s+[+-]\d{4})?$') {
+            throw "Horario XMLTV ElCinema invalido: $rawTime"
+          }
+          $datePart = [datetime]::ParseExact($matches[1], 'yyyyMMddHHmmss', [cultureinfo]::InvariantCulture)
+          $suffix = if ($matches[2]) { $matches[2] } else { '' }
+          $node.SetAttribute($attr, $datePart.AddHours(-1).ToString('yyyyMMddHHmmss', [cultureinfo]::InvariantCulture) + $suffix)
+        }
+        $start = $node.GetAttribute('start')
+        $stop = $node.GetAttribute('stop')
+      }
+      $key = "$id|$start|$stop|$($titleNode.InnerText)"
       if (-not $dedupe.Add($key)) { continue }
       [void]$tv.AppendChild($output.ImportNode($node, $true))
       $counts[$id]++
