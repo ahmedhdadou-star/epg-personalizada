@@ -41,6 +41,33 @@ jobs:
         run: |
           node elcinema-mbc-rotana.cjs
           node elcinema-otros-ar.cjs
+      - name: Comparar cabeceras HTTP MBC 5
+        working-directory: upstream-epg
+        run: |
+          node - <<'NODE'
+          const axios=require('axios'),cheerio=require('cheerio');
+          const url='https://elcinema.com/tvguide/1354/';
+          const variants=[
+            ['powershell',{'User-Agent':'Mozilla/5.0 (compatible; XMLTV-Guide/1.0)','Accept-Language':'ar,en;q=0.8'}],
+            ['simple',{'User-Agent':'Mozilla/5.0'}],
+            ['browser-es',{'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36','Accept-Language':'es-ES,es;q=0.9,ar;q=0.8'}]
+          ];
+          (async()=>{
+            for(const [name,headers] of variants){
+              const r=await axios.get(url,{headers,timeout:25000});
+              const $=cheerio.load(r.data);
+              const rows=[];
+              $('.dates').first().parent().next().find('.padded-half').slice(0,10).each((_,p)=>{
+                const x=$(p);
+                const title=x.find('.row > div.columns.small-6.large-3 > ul > li:nth-child(1) > a').text()||x.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(1)').text();
+                const time=x.find('.row > div.columns.small-3.large-2 > ul > li:nth-child(1)').text()||x.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(2)').text();
+                rows.push(time.replace(/\s+/g,' ').trim()+' | '+title.replace(/\s+/g,' ').trim());
+              });
+              console.log('VARIANTE',name,'HTTP',r.status,'BYTES',Buffer.byteLength(r.data),'DATE',r.headers.date);
+              for(const x of rows)console.log('RAW',name,x);
+            }
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
       - name: Guardar HTML original de MBC 5
         working-directory: upstream-epg
         run: |
