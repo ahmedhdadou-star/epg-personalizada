@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="canalplus.com" site_id="#272" lang="fr" xmltv_id="france24arabic.ae">France 24 Arabic</channel>
+  <channel site="sky.com" site_id="IT#5193" lang="it" xmltv_id="bbcarabic.sa">BBC Arabic</channel>
+  <channel site="shahid.mbc.net" site_id="862837" lang="ar" xmltv_id="asharqnews.ae">Asharq News</channel>
+  <channel site="shahid.mbc.net" site_id="1001845" lang="ar" xmltv_id="asharqdiscovery.ae">Asharq Discovery</channel>
+  <channel site="shahid.mbc.net" site_id="997605" lang="ar" xmltv_id="asharqdocumentary.ae">Asharq Documentary</channel>
+  <channel site="sky.com" site_id="IT#5161" lang="it" xmltv_id="aljazeeramobasher.ae">Al Jazeera Mubasher</channel>
+  <channel site="bein.com" site_id="entertainment#26" lang="ar" xmltv_id="Al.Jazeera.Documentary.HD.ae">Al Jazeera Documentary</channel>
+  <channel site="elcinema.com" site_id="1266" lang="ar" xmltv_id="natgeoabudhabi.ae">National Geographic Abu Dhabi</channel>
+</channels>
