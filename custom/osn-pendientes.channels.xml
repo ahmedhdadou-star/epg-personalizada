@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="osn.com" site_id="9069" lang="ar" xmltv_id="AbuDhabiSports1.ae">AD Sports 1</channel>
+  <channel site="osn.com" site_id="9970" lang="ar" xmltv_id="alarabiya.ae">Al Arabiya</channel>
+  <channel site="osn.com" site_id="3800" lang="ar" xmltv_id="alaraby.ae">Al Araby TV</channel>
+  <channel site="osn.com" site_id="4510" lang="ar" xmltv_id="fatafeat.ae">Fatafeat</channel>
+  <channel site="osn.com" site_id="9393" lang="ar" xmltv_id="royatv.ae">Roya TV</channel>
+  <channel site="osn.com" site_id="9961" lang="ar" xmltv_id="ksaksasports1.sa">KSA Sports 1</channel>
+  <channel site="osn.com" site_id="9987" lang="ar" xmltv_id="cnarabic.ae">CN Arabic</channel>
+  <channel site="osn.com" site_id="4507" lang="ar" xmltv_id="cnarabicnew.ae">CN Arabic New</channel>
+  <channel site="osn.com" site_id="9971" lang="ar" xmltv_id="mbc3ae.ae">MBC 3</channel>
+  <channel site="osn.com" site_id="5663" lang="ar" xmltv_id="nickelodeon.ae">Nickelodeon Arabia</channel>
+  <channel site="osn.com" site_id="5670" lang="ar" xmltv_id="nickjr.ae">Nick Jr Arabia</channel>
+  <channel site="osn.com" site_id="5671" lang="ar" xmltv_id="nicktoons.ae">Nicktoons Arabia</channel>
+  <channel site="osn.com" site_id="411" lang="ar" xmltv_id="mbcmood.ae">MBC Mood</channel>
+</channels>
