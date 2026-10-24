@@ -41,6 +41,35 @@ jobs:
         run: |
           node elcinema-mbc-rotana.cjs
           node elcinema-otros-ar.cjs
+      - name: Guardar HTML original de MBC 5
+        working-directory: upstream-epg
+        run: |
+          node - <<'NODE'
+          const axios=require('axios'), fs=require('fs'), cheerio=require('cheerio');
+          (async()=>{
+            const url='https://elcinema.com/tvguide/1354/';
+            const response=await axios.get(url,{timeout:25000,headers:{'User-Agent':'Mozilla/5.0 (compatible; XMLTV-Guide/1.0)','Accept-Language':'ar,en;q=0.8'}});
+            fs.writeFileSync('mbc5-html-github.html',response.data,'utf8');
+            console.log('HTTP',response.status,'bytes',Buffer.byteLength(response.data));
+            console.log('Date header',response.headers.date||'sin fecha');
+            const $=cheerio.load(response.data);
+            $('.dates').slice(0,3).each((i,el)=>{
+              console.log('BLOQUE WEB',i,$(el).text().replace(/\\s+/g,' ').trim());
+              $(el).parent().next().find('.padded-half').slice(0,12).each((j,p)=>{
+                const row=$(p);
+                const title=row.find('.row > div.columns.small-6.large-3 > ul > li:nth-child(1) > a').text()||row.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(1)').text();
+                const time=row.find('.row > div.columns.small-3.large-2 > ul > li:nth-child(1)').text()||row.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(2)').text();
+                console.log('WEB',j,time.replace(/\\s+/g,' ').trim(),'|',title.replace(/\\s+/g,' ').trim());
+              });
+            });
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
+      - name: Conservar HTML de MBC 5
+        uses: actions/upload-artifact@v4
+        with:
+          name: mbc5-html-github
+          path: upstream-epg/mbc5-html-github.html
+          retention-days: 7
       - name: Listar programas MBC 5
         working-directory: upstream-epg
         run: |
