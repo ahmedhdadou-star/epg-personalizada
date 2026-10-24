@@ -9,7 +9,7 @@ $log = Join-Path $base 'epg-actualizacion.log'
 $dest = Join-Path $base 'epg-arabe.xml'
 $names = @(
   'snrt-marruecos.cjs', 'elcinema-mbc-rotana.cjs',
-  'elcinema-otros-ar.cjs', 'elcinema-todos.channels.xml',
+  'elcinema-otros-ar.cjs', 'elcinema-grabber.cjs', 'elcinema-todos.channels.xml',
   'elcinema-objetivos.txt', '2m-actualizable.cjs'
 )
 
@@ -29,17 +29,7 @@ try {
   if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
   New-Item -ItemType Directory -Path $stage | Out-Null
   foreach ($name in $names) { Copy-Item (Join-Path $base $name) $stage }
-  # Mantener año de ElCinema actualizado, sin modificar los scripts originales.
-  foreach ($name in @('elcinema-mbc-rotana.cjs', 'elcinema-otros-ar.cjs')) {
-    $file = Join-Path $stage $name
-    $code = [System.IO.File]::ReadAllText($file)
-    if ($code -notmatch 'const\s+YEAR\s*=\s*\d{4}') {
-      throw "No se encontro YEAR en $name; revisar antes de actualizar."
-    }
-    $year = [int](Get-Date -Format 'yyyy')
-    $code = [regex]::Replace($code, 'const\s+YEAR\s*=\s*\d{4}', "const YEAR = $year")
-    [System.IO.File]::WriteAllText($file, $code, (New-Object System.Text.UTF8Encoding($false)))
-  }
+  # ElCinema determina el año a partir de las fechas actuales: sin reescribir código.
   Push-Location $stage
   try {
     foreach ($name in @(
@@ -174,7 +164,7 @@ try {
       $channels[$id] = $true
       $counts[$id] = 0
     }
-    if ($counts[$id] -eq 0 -and $null -ne $previous) {
+    if ($counts[$id] -eq 0 -and $priority[$id] -ne 'ElCinema' -and $null -ne $previous) {
       $idRespaldo = Id-Anterior $id
       foreach ($old in $previous.SelectNodes("/tv/programme[@channel='$idRespaldo']")) {
         $titleNode = $old.SelectSingleNode('title')
