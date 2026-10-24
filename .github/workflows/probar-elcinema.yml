@@ -39,6 +39,10 @@ jobs:
         run: |
           node elcinema-mbc-rotana.cjs
           node elcinema-otros-ar.cjs
+      - name: Listar programas MBC 5
+        working-directory: upstream-epg
+        run: |
+          node -e "const rows=require('./elcinema-mbc-rotana.json').filter(p=>p.id==='MBC5.ae'); rows.sort((a,b)=>a.inicio.localeCompare(b.inicio)); for(const p of rows) console.log(p.inicio+' | '+p.titulo); console.log('TOTAL MBC 5: '+rows.length)"
       - name: Verificar horarios y 31 canales sin desplazamientos
         working-directory: upstream-epg
         run: node elcinema-test.cjs
