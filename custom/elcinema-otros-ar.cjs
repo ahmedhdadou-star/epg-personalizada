@@ -100,7 +100,7 @@ async function extraer([siteId, id, nombre]) {
       const respuesta = await axios.get(url + sufijo, opciones)
       paginas.push({ html: respuesta.data, origen: sufijo })
     } catch (e) {
-      console.warn(nombre + ': consulta historica ' + sufijo + ': ' + e.message)
+      console.log(nombre + ': consulta historica ' + sufijo + ': ' + e.message)
     }
   }
   let recuperadosAyer = 0
@@ -281,7 +281,7 @@ async function main() {
     const siguiente = eventos.find(e => e.inicio.isAfter(ahoraUTC))
     if (!cubierto) {
       const faltan = siguiente ? siguiente.inicio.diff(ahoraUTC, 'minute') : null
-      console.warn('COBERTURA INICIAL: ' + nombre + ' sin programa en curso; proximo inicio=' + (siguiente ? siguiente.inicio.utc().format() : 'no disponible') + '; espera_min=' + (faltan === null ? 'desconocida' : faltan))
+      console.log('COBERTURA INICIAL: ' + nombre + ' sin programa en curso; proximo inicio=' + (siguiente ? siguiente.inicio.utc().format() : 'no disponible') + '; espera_min=' + (faltan === null ? 'desconocida' : faltan))
     }
   }
 
