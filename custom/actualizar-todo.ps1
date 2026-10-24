@@ -363,7 +363,7 @@ try {
             $actualizado = @($ok | Where-Object { $_ -like "$nombre :*" }).Count -gt 0
             if ($nombre -eq 'uk-sports.xml') { $actualizado = [bool]($sky -and $tnt) }
             if ($nombre -eq 'osn-pendientes.xml') {
-                $actualizado = @($ok | Where-Object { $_ -like 'Abu Dhabi Sports 1:*' }).Count -gt 0
+                $actualizado = @($ok | Where-Object { $_ -like 'osn-pendientes.xml :*' }).Count -gt 0
             }
             if ($actualizado) { Copy-Item (Join-Path $work $nombre) (Join-Path $base $nombre) -Force }
         }
