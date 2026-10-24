@@ -48,7 +48,23 @@ try {
     )) {
       Write-Host "`n>>> $name"
       & node $name
-      if ($LASTEXITCODE -ne 0) { throw "Fallo la ejecucion de $name" }
+      if ($LASTEXITCODE -ne 0) {
+        if ($name -in @('2m-actualizable.cjs', 'snrt-marruecos.cjs')) {
+          Write-Warning "Fuente $name no disponible; se utilizara respaldo vigente si existe."
+          $fallbackFile = if ($name -eq '2m-actualizable.cjs') { '2m.xml' } else { 'snrt-marruecos.xml' }
+          $fallbackPath = Join-Path $stage $fallbackFile
+          $validFallback = $false
+          if (Test-Path $fallbackPath) {
+            try {
+              [xml]$existing = Get-Content $fallbackPath -Raw -Encoding UTF8
+              $validFallback = $existing.DocumentElement.LocalName -eq 'tv'
+            } catch {}
+          }
+          if (-not $validFallback) {
+            [System.IO.File]::WriteAllText($fallbackPath, '<?xml version="1.0" encoding="UTF-8"?><tv></tv>', (New-Object System.Text.UTF8Encoding($false)))
+          }
+        } else { throw "Fallo la ejecucion de $name" }
+      }
     }
   } finally { Pop-Location }
 
