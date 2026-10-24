@@ -113,6 +113,138 @@ try {
       $stop = $node.GetAttribute('stop')
       $titleNode = $node.SelectSingleNode('title')
       if ($null -eq $titleNode -or -not $start) { throw "Programa incompleto: $id" }
+      # Ajuste publicado ElCinema: -1 hora, aplicado SOLO a programas nuevos
+      # de los 31 canales ElCinema. SNRT, 2M y respaldos quedan intactos.
+      if ($entry.name -eq 'ElCinema') {
+        foreach ($attr in @('start','stop')) {
+          $rawTime = $node.GetAttribute($attr)
+          if ($rawTime -notmatch '^(\\d{14})(\\s+[+-]\\d{4})?
+      if (-not $dedupe.Add($key)) { continue }
+      [void]$tv.AppendChild($output.ImportNode($node, $true))
+      $counts[$id]++
+    }
+  }
+  # Tolerancia general: un canal sin datos nuevos no bloquea los demas.
+  # Recuperar solo programacion no caducada del XMLTV anterior, si existe.
+  $nowUTC = [DateTime]::UtcNow.ToString('yyyyMMddHHmmss')
+  $previous = $null
+  if (Test-Path $dest) {
+    try { [xml]$previous = Get-Content $dest -Raw -Encoding UTF8 }
+    catch { Write-Warning 'La EPG anterior no es XML valido; no se reutilizara.' }
+  }
+  if ($null -eq $previous) {
+    $publicada = Join-Path $stage 'epg-publicada-anterior.xml'
+    try {
+      Invoke-WebRequest -Uri 'https://ahmedhdadou-star.github.io/epg-personalizada/epg-total.xml' -OutFile $publicada -UseBasicParsing -TimeoutSec 60 -ErrorAction Stop
+      [xml]$copia = Get-Content $publicada -Raw -Encoding UTF8
+      if ($copia.DocumentElement.LocalName -ne 'tv' -or @($copia.SelectNodes('/tv/programme')).Count -lt 100) {
+        throw 'El respaldo publicado no contiene XMLTV valido suficiente.'
+      }
+      $previous = $copia
+      Write-Host 'Respaldo XMLTV publicado recuperado para canales sin programas.' -ForegroundColor Yellow
+    } catch {
+      Write-Warning "No se pudo recuperar el respaldo publicado: $($_.Exception.Message)"
+    }
+  }
+  # El XMLTV publicado adapta ciertos IDs a los identificadores M3U.
+  $idsPublicados = @{
+    'AlAoula.ma' = 'alaoula.ae'
+    '2M.ma' = '2mmaroc.es'
+    'MBC1.ae' = 'mbc1.ae'
+    'RotanaCinemaEgypt.eg' = 'rotanacinemaegypt.ae'
+  }
+  function Id-Anterior([string]$id) {
+    if ($null -ne $previous -and $idsPublicados.ContainsKey($id) -and
+        $null -ne $previous.SelectSingleNode("/tv/channel[@id='$($idsPublicados[$id])']")) {
+      return $idsPublicados[$id]
+    }
+    return $id
+  }
+  foreach ($id in $priority.Keys) {
+    if (-not $channels.ContainsKey($id)) {
+      $idRespaldo = Id-Anterior $id
+      $oldChannel = if ($null -ne $previous) { $previous.SelectSingleNode("/tv/channel[@id='$idRespaldo']") } else { $null }
+      if ($null -ne $oldChannel) {
+        $importado = $output.ImportNode($oldChannel, $true)
+        $importado.SetAttribute('id', $id)
+        [void]$tv.AppendChild($importado)
+      } else {
+        $fallback = $output.CreateElement('channel')
+        $fallback.SetAttribute('id', $id)
+        $display = $output.CreateElement('display-name')
+        $display.InnerText = $id
+        [void]$fallback.AppendChild($display)
+        [void]$tv.AppendChild($fallback)
+      }
+      $channels[$id] = $true
+      $counts[$id] = 0
+    }
+    if ($counts[$id] -eq 0 -and $null -ne $previous) {
+      $idRespaldo = Id-Anterior $id
+      foreach ($old in $previous.SelectNodes("/tv/programme[@channel='$idRespaldo']")) {
+        $titleNode = $old.SelectSingleNode('title')
+        $startTime = $old.GetAttribute('start')
+        $endTime = $old.GetAttribute('stop')
+        if (-not $endTime) { $endTime = $startTime }
+        if ($null -eq $titleNode -or $startTime.Length -lt 14 -or $endTime.Length -lt 14) { continue }
+        if ($endTime.Substring(0,14) -lt $nowUTC) { continue }
+        $key = "$id|$startTime|$($old.GetAttribute('stop'))|$($titleNode.InnerText)"
+        if ($dedupe.Add($key)) {
+          $importado = $output.ImportNode($old, $true)
+          $importado.SetAttribute('channel', $id)
+          [void]$tv.AppendChild($importado)
+          $counts[$id]++
+        }
+      }
+    }
+    if ($counts[$id] -eq 0) {
+      Write-Warning "${id}: sin EPG vigente; se mantiene el canal sin inventar programas."
+    }
+  }
+  # Evitar publicar una guia global casi vacia si fallan numerosas fuentes.
+  $totalProgramas = @($tv.SelectNodes('/tv/programme')).Count
+  $canalesConDatos = @($priority.Keys | Where-Object { $counts[$_] -gt 0 }).Count
+  if ($totalProgramas -lt 100 -or $canalesConDatos -lt 10) {
+    throw "EPG insuficiente: $totalProgramas programas en $canalesConDatos canales (minimo: 100 programas y 10 canales)."
+  }
+  # Escribir y verificar en staging. Solo sustituir el archivo final si todo sale bien.
+  $candidate = Join-Path $stage 'epg-arabe.xml'
+  $settings = New-Object System.Xml.XmlWriterSettings
+  $settings.Indent = $true
+  $settings.Encoding = New-Object System.Text.UTF8Encoding($false)
+  $writer = [System.Xml.XmlWriter]::Create($candidate, $settings)
+  try { $output.Save($writer) } finally { $writer.Dispose() }
+  [xml]$check = Get-Content $candidate -Raw -Encoding UTF8
+  if (@($check.SelectNodes('/tv/channel')).Count -ne 38) {
+    throw 'Error de validacion: se esperaban 38 canales.'
+  }
+  $backup = Join-Path $base 'epg-arabe-anterior.xml'
+  if (Test-Path $dest) { Copy-Item $dest $backup -Force }
+  Copy-Item $candidate $dest -Force
+  $total = @($check.SelectNodes('/tv/programme')).Count
+  $status = "OK $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - 38 canales, $total programas; $canalesConDatos canales con programacion. Los canales vacios no bloquean la publicacion."
+  Add-Content $log $status -Encoding UTF8
+  Write-Host "`n$status" -ForegroundColor Green
+  Write-Host "Resultado: $dest"
+  Write-Host "Copia anterior: $backup"
+}
+catch {
+  $msg = "ERROR $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - $($_.Exception.Message)"
+  Add-Content $log $msg -Encoding UTF8
+  Write-Error "$msg. No se ha sustituido el XMLTV valido anterior."
+  exit 1
+}
+
+) {
+            throw "Horario XMLTV ElCinema invalido: $rawTime"
+          }
+          $datePart = [datetime]::ParseExact($matches[1], 'yyyyMMddHHmmss', [cultureinfo]::InvariantCulture)
+          $suffix = if ($matches[2]) { $matches[2] } else { '' }
+          $node.SetAttribute($attr, $datePart.AddHours(-1).ToString('yyyyMMddHHmmss', [cultureinfo]::InvariantCulture) + $suffix)
+        }
+        $start = $node.GetAttribute('start')
+        $stop = $node.GetAttribute('stop')
+      }
       $key = "$id|$start|$stop|$($titleNode.InnerText)"
       if (-not $dedupe.Add($key)) { continue }
       [void]$tv.AppendChild($output.ImportNode($node, $true))
