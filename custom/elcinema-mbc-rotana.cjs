@@ -162,6 +162,17 @@ async function main() {
     console.log(`${p.nombre} | ${p.fecha} ${p.horario} -> ${xmlTime(p.inicio)}`)
   }
 
+  // Traza de los primeros eventos por canal antes de generar el XMLTV.
+  // Permite detectar perdidas en el extractor sin alterar horas ni programacion.
+  for (const [, id, nombre] of canales) {
+    if (id !== 'MBC5.ae' && id !== 'RotanaCinemaEgypt.eg' && id !== 'MBC1.ae') continue
+    const ordenados = todos.filter(p => p.id === id).sort((a,b) => a.inicio.valueOf()-b.inicio.valueOf())
+    console.log('INICIO EL-CINEMA ' + nombre + ': ' + ordenados.length + ' programas')
+    for (const p of ordenados.slice(0, 10)) {
+      console.log('PRIMEROS ' + id + ': web=' + p.fecha + ' ' + p.horario + ' | xmlUTC=' + xmlTime(p.inicio.add(6,'hour')) + ' | titulo=' + p.titulo)
+    }
+  }
+
   todos.sort((a,b) =>
     a.id.localeCompare(b.id) ||
     a.inicio.valueOf()-b.inicio.valueOf()
