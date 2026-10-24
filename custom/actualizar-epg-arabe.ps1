@@ -117,6 +117,7 @@ try {
       if ($entry.name -eq 'ElCinema') {
         foreach ($attr in @('start','stop')) {
           $rawTime = $node.GetAttribute($attr)
+          if ($attr -eq 'stop' -and [string]::IsNullOrWhiteSpace($rawTime)) { continue }
           if ($rawTime -notmatch '^(\d{14})(\s+[+-]\d{4})?$') {
             throw "Horario XMLTV ElCinema invalido: $rawTime"
           }
