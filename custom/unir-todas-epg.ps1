@@ -28,7 +28,8 @@ $grupos = @(
     @('now-4k.xml'),
     @('bein.xml'),
     @('medi1.xml','medi1tv.xml','medi1-arabic.xml'),
-    @('aljazeera-arabic.xml','aljazeera.xml')
+    @('aljazeera-arabic.xml','aljazeera.xml'),
+    @('osn-pendientes.xml')
 )
 
 $elegidos = [System.Collections.Generic.List[string]]::new()
