@@ -16,7 +16,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      TZ: Africa/Cairo
+      TZ: Etc/GMT-6
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
