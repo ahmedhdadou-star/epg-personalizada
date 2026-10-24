@@ -312,21 +312,15 @@ try {
             $sky = $null; $tnt = $null
         }
     } else { $fallos.Add('uk-sports.xml : la combinacion nueva no esta completa') }
-    # OSN exclusivamente Abu Dhabi Sports 1; otras señales de prueba se excluyen.
-    $osn = Grabar '_osn-prueba.xml' @('arabic-sports-prueba.channels.xml')
+    # OSN: solo canales pendientes. Se generan IDs M3U diferentes para cada Cartoon Network.
+    $osn = Grabar 'osn-pendientes.xml' @('osn-pendientes.channels.xml')
     if ($osn) {
-        try {
-            Filtrar-AbuDhabi $osn (Join-Path $work 'arabic-sports-sin-duplicados.xml')
-            if ((Probar-XML (Join-Path $work 'arabic-sports-sin-duplicados.xml') $true) -eq 0) {
-                throw 'OSN no devolvio emisiones actuales'
-            }
-            $ok.Add('Abu Dhabi Sports 1: filtrado; revisar duracion excepcional.')
-        } catch { $fallos.Add("Abu Dhabi Sports 1: $($_.Exception.Message)") }
+        $ok.Add('OSN pendientes: canales seleccionados; CN Arabic y CN New separados.')
     }
     # 3. Conservar fuentes anteriores si no se han podido regenerar.
     $merge = Join-Path $work 'unir-todas-epg.ps1'
     Copy-Item (Join-Path $base 'unir-todas-epg.ps1') $merge
-    $salidas = @($fuentes | ForEach-Object { $_.Dest }) + @('uk-sports.xml','arabic-sports-sin-duplicados.xml','medi1-arabic.xml')
+    $salidas = @($fuentes | ForEach-Object { $_.Dest }) + @('uk-sports.xml','osn-pendientes.xml','medi1-arabic.xml')
     foreach ($nombre in $salidas) {
         $nuevo = Join-Path $work $nombre
         $anterior = Join-Path $base $nombre
@@ -368,7 +362,7 @@ try {
             # No publicar copias antiguas como si fueran descargas nuevas.
             $actualizado = @($ok | Where-Object { $_ -like "$nombre :*" }).Count -gt 0
             if ($nombre -eq 'uk-sports.xml') { $actualizado = [bool]($sky -and $tnt) }
-            if ($nombre -eq 'arabic-sports-sin-duplicados.xml') {
+            if ($nombre -eq 'osn-pendientes.xml') {
                 $actualizado = @($ok | Where-Object { $_ -like 'Abu Dhabi Sports 1:*' }).Count -gt 0
             }
             if ($actualizado) { Copy-Item (Join-Path $work $nombre) (Join-Path $base $nombre) -Force }
