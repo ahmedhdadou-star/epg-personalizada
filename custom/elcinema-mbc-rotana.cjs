@@ -80,17 +80,34 @@ function fechaLocal(fecha, horario) {
 async function extraer([siteId, id, nombre]) {
   const url = `https://elcinema.com/tvguide/${siteId}/`
 
-  const { data } = await axios.get(url, {
-    headers: {'User-Agent':'Mozilla/5.0'},
-    timeout: 20000
-  })
-
-  const $ = cheerio.load(data)
+  const opciones = { headers: {'User-Agent':'Mozilla/5.0'}, timeout: 20000 }
+  const { data } = await axios.get(url, opciones)
   const lista = []
+  const ayer = dayjs().tz(ZONE).subtract(1, 'day')
+  const fechaAyer = ayer.format('YYYY-MM-DD')
+  // ElCinema puede servir una ventana movil. Probar la fecha anterior
+  // y aceptar unicamente bloques con encabezado correspondiente a ese dia.
+  const paginas = [{ html: data, origen: 'actual' }]
+  for (const sufijo of ['?date=' + fechaAyer, '?day=' + fechaAyer]) {
+    try {
+      const respuesta = await axios.get(url + sufijo, opciones)
+      paginas.push({ html: respuesta.data, origen: sufijo })
+    } catch (e) {
+      console.warn(nombre + ': consulta historica ' + sufijo + ': ' + e.message)
+    }
+  }
+  let recuperadosAyer = 0
+  const vistos = new Set()
+  for (const pagina of paginas) {
+    const $ = cheerio.load(pagina.html)
+    $('.dates').each((_, encabezado) => {
+      const fecha = clean($(encabezado).text())
+      const coincideAyer = fecha.includes(String(ayer.date())) &&
+        Object.entries(meses).some(([mes, numero]) =>
+          numero === ayer.month() + 1 && fecha.includes(mes))
+      if (pagina.origen !== 'actual' && !coincideAyer) return
 
-  $('.dates').each((_, encabezado) => {
-    const fecha = clean($(encabezado).text())
-    const bloque = $(encabezado).parent().next()
+        const bloque = $(encabezado).parent().next()
 
     bloque.find('.padded-half').each((_, elemento) => {
       const p = $(elemento)
@@ -126,6 +143,10 @@ async function extraer([siteId, id, nombre]) {
 
       if (!inicio || !titulo) return
 
+      const clave = id + '|' + inicio.valueOf() + '|' + titulo
+      if (vistos.has(clave)) return
+      vistos.add(clave)
+      if (pagina.origen !== 'actual') recuperadosAyer++
       lista.push({
         id, nombre, titulo,
         descripcion, categoria,
@@ -133,8 +154,9 @@ async function extraer([siteId, id, nombre]) {
         inicio
       })
     })
-  })
-
+    })
+  }
+  console.log(nombre + ': ' + recuperadosAyer + ' programas previos adicionales')
   return lista
 }
 
