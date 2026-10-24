@@ -1,0 +1,44 @@
+name: Probar ElCinema sin publicar
+
+on:
+  pull_request:
+    paths:
+      - "custom/elcinema-*.cjs"
+      - "custom/elcinema-todos.channels.xml"
+      - "custom/elcinema-objetivos.txt"
+      - ".github/workflows/probar-elcinema.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Dependencias compatibles con la compilación
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git upstream-epg
+          cd upstream-epg
+          npm ci
+      - name: Preparar extractores
+        run: cp custom/elcinema-* upstream-epg/
+      - name: Comprobar sintaxis JavaScript
+        run: |
+          node --check upstream-epg/elcinema-grabber.cjs
+          node --check upstream-epg/elcinema-mbc-rotana.cjs
+          node --check upstream-epg/elcinema-otros-ar.cjs
+          node --check upstream-epg/elcinema-test.cjs
+      - name: Extraer guía actual desde ElCinema
+        working-directory: upstream-epg
+        run: |
+          node elcinema-mbc-rotana.cjs
+          node elcinema-otros-ar.cjs
+      - name: Verificar horarios y 31 canales sin desplazamientos
+        working-directory: upstream-epg
+        run: node elcinema-test.cjs
