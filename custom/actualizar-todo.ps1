@@ -317,10 +317,15 @@ try {
     if ($osn) {
         $ok.Add('OSN pendientes: canales seleccionados; CN Arabic y CN New separados.')
     }
+    # Seis informativos/documentales probados localmente; sin los dos canales vacios.
+    $informativos = Grabar 'arabes-informativos.xml' @('arabes-informativos-seleccion.channels.xml')
+    if ($informativos) {
+        $ok.Add('Informativos arabes: seis canales seleccionados con programacion.')
+    }
     # 3. Conservar fuentes anteriores si no se han podido regenerar.
     $merge = Join-Path $work 'unir-todas-epg.ps1'
     Copy-Item (Join-Path $base 'unir-todas-epg.ps1') $merge
-    $salidas = @($fuentes | ForEach-Object { $_.Dest }) + @('uk-sports.xml','osn-pendientes.xml','medi1-arabic.xml')
+    $salidas = @($fuentes | ForEach-Object { $_.Dest }) + @('uk-sports.xml','osn-pendientes.xml','arabes-informativos.xml','medi1-arabic.xml')
     foreach ($nombre in $salidas) {
         $nuevo = Join-Path $work $nombre
         $anterior = Join-Path $base $nombre
