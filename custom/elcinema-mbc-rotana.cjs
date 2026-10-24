@@ -228,6 +228,23 @@ async function main() {
     exportados++
   }
 
+  // Comprobar cobertura real despues de aplicar el desplazamiento +6h.
+  // No se rellenan huecos inventando emisiones ni reetiquetando el respaldo.
+  const ahoraUTC = dayjs.utc()
+  for (const [, id, nombre] of canales) {
+    const eventos = todos.filter(p => p.id === id).map(p => ({
+      inicio: p.inicio.add(6, 'hour'),
+      fin: p.inicio.add((p.duracion || 0), 'minute').add(6, 'hour')
+    })).sort((a,b) => a.inicio.valueOf() - b.inicio.valueOf())
+    if (!eventos.length) continue
+    const cubierto = eventos.some(e => !e.inicio.isAfter(ahoraUTC) && e.fin.isAfter(ahoraUTC))
+    const siguiente = eventos.find(e => e.inicio.isAfter(ahoraUTC))
+    if (!cubierto) {
+      const faltan = siguiente ? siguiente.inicio.diff(ahoraUTC, 'minute') : null
+      console.warn('COBERTURA INICIAL: ' + nombre + ' sin programa en curso; proximo inicio=' + (siguiente ? siguiente.inicio.utc().format() : 'no disponible') + '; espera_min=' + (faltan === null ? 'desconocida' : faltan))
+    }
+  }
+
   xml += '</tv>\n'
 
   fs.writeFileSync('elcinema-mbc-rotana.xml',xml,'utf8')
