@@ -48,3 +48,13 @@ jobs:
       - name: Verificar horarios y 31 canales sin desplazamientos
         working-directory: upstream-epg
         run: node elcinema-test.cjs
+      - name: Exportar programas MBC 5 para comparacion local
+        working-directory: upstream-epg
+        run: |
+          node -e "const fs=require('fs'); const data=require('./elcinema-mbc-rotana.json').filter(p=>p.id==='MBC5.ae'); fs.writeFileSync('mbc5-github.json',JSON.stringify(data,null,2),'utf8')"
+      - name: Guardar JSON MBC 5
+        uses: actions/upload-artifact@v4
+        with:
+          name: mbc5-github
+          path: upstream-epg/mbc5-github.json
+          retention-days: 7
