@@ -30,7 +30,8 @@ $grupos = @(
     @('medi1.xml','medi1tv.xml','medi1-arabic.xml'),
     @('aljazeera-arabic.xml','aljazeera.xml'),
     @('osn-pendientes.xml'),
-    @('arabes-informativos.xml')
+    @('arabes-informativos.xml'),
+    @('ripper-12-canales-2026-10-25.xml')
 )
 
 $elegidos = [System.Collections.Generic.List[string]]::new()
@@ -63,6 +64,27 @@ foreach ($ruta in $elegidos) {
     catch { throw "Error leyendo ${nombre}: $($_.Exception.Message)" }
     if (-not $origen.DocumentElement -or $origen.DocumentElement.LocalName -ne 'tv') {
         throw "No es XMLTV valido: $nombre"
+    }
+    # Captura estatica: no incorporar emisiones caducadas.
+    if ($nombre -eq 'ripper-12-canales-2026-10-25.xml') {
+        $hoyUtc = [DateTime]::UtcNow.ToString('yyyyMMddHHmmss')
+        $vigentes = @($origen.SelectNodes('/tv/programme') | Where-Object {
+            $fin = $_.GetAttribute('stop')
+            if (-not $fin) { $fin = $_.GetAttribute('start') }
+            $fin.Length -ge 14 -and $fin.Substring(0,14) -ge $hoyUtc
+        })
+        if ($vigentes.Count -eq 0) {
+            Write-Warning 'Captura Ripper caducada: se omite del XMLTV.'
+            continue
+        }
+        # No transmitir emisiones que ya han terminado.
+        foreach ($prog in @($origen.SelectNodes('/tv/programme'))) {
+            $fin = $prog.GetAttribute('stop')
+            if (-not $fin) { $fin = $prog.GetAttribute('start') }
+            if ($fin.Length -lt 14 -or $fin.Substring(0,14) -lt $hoyUtc) {
+                [void]$origen.DocumentElement.RemoveChild($prog)
+            }
+        }
     }
     $alta = 0
     foreach ($c in @($origen.SelectNodes('/tv/channel'))) {
