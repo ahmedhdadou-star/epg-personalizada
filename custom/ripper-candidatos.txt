@@ -1,0 +1,15 @@
+# Seleccion de canales procedentes del XMLTV externo epg_ripper_ALL_SOURCES1.xml.gz
+# Formato: id origen | id M3U | nombre
+# Solo publicar cuando se verifique que el archivo fuente es reciente.
+Al.Jazeera.Mobasher.HD.ae|aljazeeramobasher.ae|Al Jazeera Mubasher
+Nat.Geo.Abu.Dhabi.HD.ae|natgeoabudhabi.ae|National Geographic Abu Dhabi
+Samira.HD.ae|samira.ae|Samira TV
+Echorouk.News.ae|echourouknews.ae|Echourouk News
+Al.Hayat.ae|alhayat.ae|Al Hayat
+Syria.TV.HD.ae|syriatv.ae|Syria TV
+ART.CINEMA.fr|artcinema.ae|ART Cinema
+ART.AFLAM.1.fr|artaflam1.sa|ART Aflam 1
+ART.AFLAM.2.fr|artaflam2.sa|ART Aflam 2
+Rotana.Aflam+.fr|rotanaaflamplus.ae|Rotana Aflam+
+Space.Toon.ae|spacetoon.ae|Spacetoon
+Majid.Kids.TV.HD.ae|majidkids.ae|Majid Kids
