@@ -1,0 +1,116 @@
+name: Probar ElCinema sin publicar
+
+on:
+  pull_request:
+    paths:
+      - "custom/elcinema-*.cjs"
+      - "custom/elcinema-todos.channels.xml"
+      - "custom/elcinema-objetivos.txt"
+      - ".github/workflows/probar-elcinema.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Etc/GMT-6
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Dependencias compatibles con la compilación
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git upstream-epg
+          cd upstream-epg
+          npm ci
+      - name: Preparar extractores
+        run: cp custom/elcinema-* upstream-epg/
+      - name: Comprobar sintaxis JavaScript
+        run: |
+          node --check upstream-epg/elcinema-grabber.cjs
+          node --check upstream-epg/elcinema-mbc-rotana.cjs
+          node --check upstream-epg/elcinema-otros-ar.cjs
+          node --check upstream-epg/elcinema-test.cjs
+      - name: Extraer guía actual desde ElCinema
+        working-directory: upstream-epg
+        run: |
+          node elcinema-mbc-rotana.cjs
+          node elcinema-otros-ar.cjs
+      - name: Comparar cabeceras HTTP MBC 5
+        working-directory: upstream-epg
+        run: |
+          node - <<'NODE'
+          const axios=require('axios'),cheerio=require('cheerio');
+          const url='https://elcinema.com/tvguide/1354/';
+          const variants=[
+            ['powershell',{'User-Agent':'Mozilla/5.0 (compatible; XMLTV-Guide/1.0)','Accept-Language':'ar,en;q=0.8'}],
+            ['simple',{'User-Agent':'Mozilla/5.0'}],
+            ['browser-es',{'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36','Accept-Language':'es-ES,es;q=0.9,ar;q=0.8'}]
+          ];
+          (async()=>{
+            for(const [name,headers] of variants){
+              const r=await axios.get(url,{headers,timeout:25000});
+              const $=cheerio.load(r.data);
+              const rows=[];
+              $('.dates').first().parent().next().find('.padded-half').slice(0,10).each((_,p)=>{
+                const x=$(p);
+                const title=x.find('.row > div.columns.small-6.large-3 > ul > li:nth-child(1) > a').text()||x.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(1)').text();
+                const time=x.find('.row > div.columns.small-3.large-2 > ul > li:nth-child(1)').text()||x.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(2)').text();
+                rows.push(time.replace(/\s+/g,' ').trim()+' | '+title.replace(/\s+/g,' ').trim());
+              });
+              console.log('VARIANTE',name,'HTTP',r.status,'BYTES',Buffer.byteLength(r.data),'DATE',r.headers.date);
+              for(const x of rows)console.log('RAW',name,x);
+            }
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
+      - name: Guardar HTML original de MBC 5
+        working-directory: upstream-epg
+        run: |
+          node - <<'NODE'
+          const axios=require('axios'), fs=require('fs'), cheerio=require('cheerio');
+          (async()=>{
+            const url='https://elcinema.com/tvguide/1354/';
+            const response=await axios.get(url,{timeout:25000,headers:{'User-Agent':'Mozilla/5.0 (compatible; XMLTV-Guide/1.0)','Accept-Language':'ar,en;q=0.8'}});
+            fs.writeFileSync('mbc5-html-github.html',response.data,'utf8');
+            console.log('HTTP',response.status,'bytes',Buffer.byteLength(response.data));
+            console.log('Date header',response.headers.date||'sin fecha');
+            const $=cheerio.load(response.data);
+            $('.dates').slice(0,3).each((i,el)=>{
+              console.log('BLOQUE WEB',i,$(el).text().replace(/\\s+/g,' ').trim());
+              $(el).parent().next().find('.padded-half').slice(0,12).each((j,p)=>{
+                const row=$(p);
+                const title=row.find('.row > div.columns.small-6.large-3 > ul > li:nth-child(1) > a').text()||row.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(1)').text();
+                const time=row.find('.row > div.columns.small-3.large-2 > ul > li:nth-child(1)').text()||row.find('.row > div.columns.small-7.large-11 > ul > li:nth-child(2)').text();
+                console.log('WEB',j,time.replace(/\\s+/g,' ').trim(),'|',title.replace(/\\s+/g,' ').trim());
+              });
+            });
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
+      - name: Conservar HTML de MBC 5
+        uses: actions/upload-artifact@v4
+        with:
+          name: mbc5-html-github
+          path: upstream-epg/mbc5-html-github.html
+          retention-days: 7
+      - name: Listar programas MBC 5
+        working-directory: upstream-epg
+        run: |
+          node -e "const rows=require('./elcinema-mbc-rotana.json').filter(p=>p.id==='MBC5.ae'); rows.sort((a,b)=>a.inicio.localeCompare(b.inicio)); for(const p of rows) console.log(p.inicio+' | '+p.titulo); console.log('TOTAL MBC 5: '+rows.length)"
+      - name: Verificar horarios y 31 canales sin desplazamientos
+        working-directory: upstream-epg
+        run: node elcinema-test.cjs
+      - name: Exportar programas MBC 5 para comparacion local
+        working-directory: upstream-epg
+        run: |
+          node -e "const fs=require('fs'); const data=require('./elcinema-mbc-rotana.json').filter(p=>p.id==='MBC5.ae'); fs.writeFileSync('mbc5-github.json',JSON.stringify(data,null,2),'utf8')"
+      - name: Guardar JSON MBC 5
+        uses: actions/upload-artifact@v4
+        with:
+          name: mbc5-github
+          path: upstream-epg/mbc5-github.json
+          retention-days: 7
